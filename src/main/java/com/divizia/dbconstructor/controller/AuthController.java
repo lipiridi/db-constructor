@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.net.http.HttpRequest;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Controller
@@ -37,25 +38,29 @@ public class AuthController {
         return "welcome";
     }
 
-    @GetMapping("/login")
+    @GetMapping("login")
     public String getLoginPage() {
         return "login";
     }
 
-    @GetMapping("/welcome")
-    public String getSuccessPage() {
+    @GetMapping("welcome")
+    public String getWelcomePage() {
         return "redirect:/";
     }
 
-    @GetMapping("/register")
+    @GetMapping("register")
     public String getRegisterPage(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("roles", Role.values());
         return "register";
     }
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public String postRegisterPage(@Valid User user, BindingResult result, Model model) {
-        if (ControllerHelper.hasErrors(result, model)) return "register";
+        if (ControllerHelper.hasErrors(result, model)) {
+            model.addAttribute("roles", Role.values());
+            return "register";
+        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.saveAndFlush(user);

@@ -26,6 +26,16 @@
             <input class="form-control" type="password" id="password" th:name="password" th:value="${user.password}">
         </div>
 
+        <div class="mb-3">
+            <label class="form-label" for="role">Role</label>
+            <select class="form-select" id="role" th:name="role">
+                <option value="">Choose from select</option>
+                <option th:each="role: ${roles}"
+                        th:text="${role}"
+                        th:value="${role}">
+            </select>
+        </div>
+
         <div class="text-center">
             <button class="btn btn-primary" type="submit">Sign up</button>
         </div>

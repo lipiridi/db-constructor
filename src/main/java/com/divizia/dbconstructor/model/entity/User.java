@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -28,10 +29,11 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Role can't be null")
     private Role role;
 
     public User() {
-        this.role = Role.ADMIN;
+        this.role = Role.USER;
     }
 
     @Override

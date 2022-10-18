@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerHelper {
-
     public static boolean hasErrors(BindingResult result, Model model) {
 
         if (!result.hasErrors()) {
