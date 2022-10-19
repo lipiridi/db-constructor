@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
+@SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("users")
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("all")
@@ -34,29 +34,27 @@ public class UserController {
     }
 
     @GetMapping("edit/{id}")
-    public String getEdit(@PathVariable Long id, Model model) {
+    public String getEdit(@PathVariable String id, Model model) {
         model.addAttribute("user", userService.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
         model.addAttribute("roles", Role.values());
         return "users/edit";
     }
 
     @PostMapping("edit/{id}")
-    public String postEdit(@PathVariable Long id, @Valid User user, BindingResult result, Model model) {
+    public String postEdit(@PathVariable String id, @Valid User user, BindingResult result, Model model) {
         if (ControllerHelper.hasErrors(result, model)) {
             model.addAttribute("roles", Role.values());
             return "users/edit";
         }
 
-        User userInDb = userService.findById(id).orElse(new User());
-        if (!userInDb.getPassword().equals(user.getPassword()))
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.findById(user.getId()).ifPresent(user::updateAllowed);
         userService.saveAndFlush(user);
 
         return "redirect:/users/all";
     }
 
     @PostMapping("delete/{id}")
-    public String postDelete(@PathVariable Long id) {
+    public String postDelete(@PathVariable String id) {
         userService.deleteById(id);
         return "redirect:/users/all";
     }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("tables")
 @PreAuthorize("hasAuthority('ADMIN')")
@@ -38,8 +39,8 @@ public class CustomTableController {
 
     @GetMapping("create")
     public String getCreate(Model model) {
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> optionalUser = userService.findByEmail(currentUserEmail);
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> optionalUser = userService.findById(currentUsername);
 
         CustomTable customTable = new CustomTable();
         customTable.setAuthor(optionalUser.orElseThrow());
@@ -82,10 +83,11 @@ public class CustomTableController {
     }
 
     @PostMapping("edit/{id}")
-    public String postEdit(@Valid CustomTable customTable, BindingResult result, Model model) {
+    public String postEdit(@PathVariable String id, @Valid CustomTable customTable, BindingResult result, Model model) {
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, customTable);
 
+        customTableService.findById(id).ifPresent(customTable::updateAllowed);
         customTableService.saveAndFlush(customTable);
 
         return "redirect:/tables/all";
@@ -98,7 +100,7 @@ public class CustomTableController {
     }
 
     @PostMapping("{customTableId}/requisite/add")
-    public String postAdd(@Valid Requisite requisite, BindingResult result, Model model) {
+    public String postAdd(@PathVariable String customTableId, @Valid Requisite requisite, BindingResult result, Model model) {
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, requisite.getCustomTable(), requisite);
 

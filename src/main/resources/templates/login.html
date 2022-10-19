@@ -15,23 +15,21 @@
 
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
     <form method="post">
-        <!-- Email input -->
+
         <div class="mb-3">
-            <label for="username" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="username" name="username" placeholder="name@example.com">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" id="username" name="username" type="text">
         </div>
 
-        <!-- Password input -->
         <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" id="password" name="password" placeholder="" type="password">
         </div>
 
-        <!-- Submit button -->
         <div class="text-center">
-        <button type="submit" class="btn btn-primary">Sign in</button>
-        <span>or</span>
-        <a type="button" class="btn btn-secondary" href="/register">Sign up</a>
+            <button class="btn btn-primary" type="submit">Sign in</button>
+            <span>or</span>
+            <a class="btn btn-secondary" href="/register" type="button">Sign up</a>
         </div>
     </form>
 </div>

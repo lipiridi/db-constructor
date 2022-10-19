@@ -39,7 +39,7 @@ public class UserRestController {
     }
 
     @GetMapping("{id}")
-    ResponseEntity<Map<String, Object>> findById(@PathVariable Long id) {
+    ResponseEntity<Map<String, Object>> findById(@PathVariable String id) {
         Map<String, Object> answer = new HashMap<>();
         Optional<User> optionalUser = userService.findById(id);
 
@@ -55,7 +55,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    ResponseEntity<Map<String, Object>> create(@Valid @RequestBody User user, BindingResult result) {
+    ResponseEntity<Map<String, Object>> save(@Valid @RequestBody User user, BindingResult result) {
         Map<String, Object> answer = new HashMap<>();
 
         if (result.hasErrors()) {
@@ -63,32 +63,16 @@ public class UserRestController {
             answer.put("message", result.getAllErrors().stream().map(x -> x.getDefaultMessage() + "; ").collect(Collectors.joining()));
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.findById(user.getId()).ifPresent(user::updateAllowed);
+
             answer.put("result", "OK");
             answer.put("user", userService.saveAndFlush(user));
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
     }
 
-    @PutMapping("{id}")
-    ResponseEntity<Map<String, Object>> update(@PathVariable Long id, @Valid @RequestBody User user, BindingResult result) {
-        Map<String, Object> answer = new HashMap<>();
-
-        if (result.hasErrors()) {
-            answer.put("result", "Error");
-            answer.put("message", result.getAllErrors().stream().map(x -> x.getDefaultMessage() + "; ").collect(Collectors.joining()));
-            return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
-        } else {
-            user.setId(id);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            answer.put("result", "OK");
-            answer.put("user", userService.saveAndFlush(user));
-            return new ResponseEntity<>(answer, HttpStatus.OK);
-        }
-    }
-
     @DeleteMapping("{id}")
-    ResponseEntity<Map<String, Object>> delete(@PathVariable Long id) {
+    ResponseEntity<Map<String, Object>> delete(@PathVariable String id) {
         Map<String, Object> answer = new HashMap<>();
         Optional<User> optionalUser = userService.findById(id);
 

@@ -15,12 +15,12 @@ import java.util.Objects;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "requisites")
+@Table(name = "a_requisites")
 @IdClass(RequisiteId.class)
 public class Requisite {
 
     @Id
-    @Pattern(regexp = "^[a-z]*[a-z_]*[a-z]$", message = "The column name must start/end with lowercase letters and all space must be replaced with '_'")
+    @Pattern(regexp = "^\\w+$", message = "The requisite id can contain only word character [a-zA-Z0-9_]")
     private String id;
 
     @Id

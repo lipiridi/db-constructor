@@ -9,11 +9,9 @@ public interface UserService {
 
     User saveAndFlush(User user);
 
-    void deleteById(Long id);
+    void deleteById(String id);
 
-    Optional<User> findById(Long id);
-
-    Optional<User> findByEmail(String email);
+    Optional<User> findById(String id);
 
     List<User> findAll();
 

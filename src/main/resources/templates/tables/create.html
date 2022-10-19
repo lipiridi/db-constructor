@@ -28,12 +28,10 @@
                 <input class="form-control" id="name" name="name" th:value="${customTable.name}" type="text">
             </div>
 
-            <input hidden name="author" th:value="${customTable.author.id}">
-
             <div class="mb-3">
-                <label class="form-label" for="authorName">Author</label>
-                <input class="form-control" id="authorName" readonly
-                       th:value="${customTable.author.name}"
+                <label class="form-label" for="author">Author</label>
+                <input class="form-control" id="author" name="author" readonly
+                       th:value="${customTable.author.id}"
                        type="text">
             </div>
         </div>

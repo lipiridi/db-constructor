@@ -18,15 +18,10 @@
 
         <div th:fragment="userFragment">
             <div class="mb-3">
-                <label class="form-label" for="email">Email address</label>
-                <input class="form-control" id="email" placeholder="name@example.com" name="email"
-                       th:value="${user.email}"
-                       type="email">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label" for="name">Name</label>
-                <input class="form-control" id="name" name="name" th:value="${user.name}" type="text">
+                <label class="form-label" for="id">Username</label>
+                <input class="form-control" id="id" name="id" type="text"
+                       th:value="${user.id}"
+                       th:readonly="${user.id != null}">
             </div>
 
             <div class="mb-3">

@@ -32,7 +32,7 @@
         <tr th:each="table : ${tables}">
             <th scope="row" th:text="${table.id}"></th>
             <td th:text="${table.name}"></td>
-            <td th:text="${table.author.name}"></td>
+            <td th:text="${table.author.id}"></td>
             <td th:text="${table.requisites.size()}"></td>
             <td>
                 <form th:action="@{'{id}/records/all'(id=${table.id})}">

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 import java.util.Optional;
 
+@SuppressWarnings("SameReturnValue")
 @Controller
 public class AuthController {
 
@@ -27,8 +28,8 @@ public class AuthController {
 
     @GetMapping(value = "/")
     public String authorize(Model model) {
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> optionalUser = userService.findByEmail(currentUserEmail);
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<User> optionalUser = userService.findById(currentUsername);
         User user = optionalUser.orElse(new User());
 
         model.addAttribute("user", user);

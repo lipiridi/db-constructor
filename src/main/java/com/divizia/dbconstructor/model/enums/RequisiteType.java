@@ -4,6 +4,7 @@ public enum RequisiteType {
 
     VARCHAR,
     INTEGER,
+    BIGINT,
     BOOLEAN,
     FOREIGN
 

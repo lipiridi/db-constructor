@@ -1,14 +1,20 @@
 package com.divizia.dbconstructor.model.entity;
 
+import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.enums.Role;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 import java.util.Set;
 
@@ -16,20 +22,15 @@ import java.util.Set;
 @Setter
 @ToString
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "a_users")
+public class User implements Updatable<User> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank(message = "Email can't be blank")
-    private String email;
-
-    @NotBlank(message = "Name can't be blank")
-    private String name;
+    @Pattern(regexp = "^\\w+$", message = "Username can contain only word character [a-zA-Z0-9_]")
+    private String id;
 
     @NotBlank(message = "Password can't be blank")
+    @ToString.Exclude
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -57,4 +58,13 @@ public class User {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    @Override
+    public void updateAllowed(User other) {
+        if (!password.equals(other.getPassword()))
+            password = new BCryptPasswordEncoder(12).encode(password);
+
+        customTables = other.getCustomTables();
+    }
+
 }

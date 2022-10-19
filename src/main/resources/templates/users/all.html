@@ -15,12 +15,10 @@
 </div>
 
 <div class="d-flex justify-content-center">
-<table class="table table-striped" style="width: 60rem">
+<table class="table table-striped" style="width: 40rem">
     <thead>
     <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Email</th>
-        <th scope="col">Name</th>
+        <th scope="col">Username</th>
         <th scope="col">Role</th>
         <th scope="col">Edit</th>
         <th scope="col">Delete</th>
@@ -29,8 +27,6 @@
     <tbody>
     <tr th:each="user : ${users}">
         <th scope="row" th:text="${user.id}"></th>
-        <td th:text="${user.email}"></td>
-        <td th:text="${user.name}"></td>
         <td th:text="${user.role}"></td>
         <td>
             <form th:action="@{'edit/{id}'(id=${user.id})}">

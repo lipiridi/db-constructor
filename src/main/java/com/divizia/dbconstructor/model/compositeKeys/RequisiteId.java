@@ -1,8 +1,6 @@
 package com.divizia.dbconstructor.model.compositeKeys;
 
-import com.divizia.dbconstructor.model.entity.CustomTable;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

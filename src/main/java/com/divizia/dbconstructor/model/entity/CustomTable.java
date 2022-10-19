@@ -1,7 +1,9 @@
 package com.divizia.dbconstructor.model.entity;
 
+import com.divizia.dbconstructor.model.Updatable;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,11 +17,11 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "custom_tables")
-public class CustomTable implements Serializable {
+@Table(name = "a_custom_tables")
+public class CustomTable implements Serializable, Updatable<CustomTable> {
 
     @Id
-    @Pattern(regexp = "^[a-z]*[a-z_]*[a-z]$", message = "The table id must start/end with lowercase letters and all space must be replaced with '_'")
+    @Pattern(regexp = "^\\w+$", message = "The table id can contain only word character [a-zA-Z0-9_]")
     private String id;
 
     @NotBlank(message = "Name can't be blank")
@@ -44,5 +46,10 @@ public class CustomTable implements Serializable {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @Override
+    public void updateAllowed(CustomTable other) {
+        requisites = other.getRequisites();
     }
 }
