@@ -1,7 +1,6 @@
 package com.divizia.dbconstructor.model.service;
 
 import com.divizia.dbconstructor.model.entity.User;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.Optional;

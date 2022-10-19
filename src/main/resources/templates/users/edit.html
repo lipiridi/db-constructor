@@ -17,31 +17,7 @@
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
     <form method="post">
 
-        <div class="mb-3">
-            <label class="form-label" for="email">Email address</label>
-            <input class="form-control" id="email" placeholder="name@example.com" th:name="email" th:value="${user.email}"
-                   type="email">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="name">Name</label>
-            <input class="form-control" id="name" th:name="name" th:value="${user.name}" type="text">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="password">Password</label>
-            <input class="form-control" id="password" th:name="password" th:value="${user.password}" type="password">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="role">Role</label>
-            <select class="form-select" id="role" th:name="role">
-                <option th:each="role: ${roles}"
-                        th:selected="${role == user.role}"
-                        th:text="${role}"
-                        th:value="${role}">
-            </select>
-        </div>
+        <div th:insert="~{register :: userFragment}"></div>
 
         <div class="text-center">
             <button class="btn btn-primary" type="submit">Edit</button>
@@ -50,9 +26,7 @@
     </form>
 </div>
 
-<div class="text-center">
-    <p th:each="error : ${errorList}" th:text="${error}"></p>
-</div>
+<div th:insert="~{fragments :: errorFragment}"></div>
 
 <script crossorigin="anonymous"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"

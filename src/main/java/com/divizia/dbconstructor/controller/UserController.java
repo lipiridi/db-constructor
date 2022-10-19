@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.controller;
 
-import com.divizia.dbconstructor.model.entity.Role;
+import com.divizia.dbconstructor.exceptions.UserNotFoundException;
+import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("users")
 public class UserController {
 
     private final UserService userService;
@@ -32,15 +33,15 @@ public class UserController {
         return "users/all";
     }
 
-    @GetMapping("/edit/{id}")
-    public String getEdit(@PathVariable long id, Model model) {
-        model.addAttribute("user", userService.findById(id).orElseThrow());
+    @GetMapping("edit/{id}")
+    public String getEdit(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
         model.addAttribute("roles", Role.values());
         return "users/edit";
     }
 
-    @PostMapping("/edit/{id}")
-    public String postEdit(@PathVariable long id, @Valid User user, BindingResult result, Model model) {
+    @PostMapping("edit/{id}")
+    public String postEdit(@PathVariable Long id, @Valid User user, BindingResult result, Model model) {
         if (ControllerHelper.hasErrors(result, model)) {
             model.addAttribute("roles", Role.values());
             return "users/edit";
@@ -54,8 +55,8 @@ public class UserController {
         return "redirect:/users/all";
     }
 
-    @PostMapping("/delete/{id}")
-    public String postDelete(@PathVariable long id) {
+    @PostMapping("delete/{id}")
+    public String postDelete(@PathVariable Long id) {
         userService.deleteById(id);
         return "redirect:/users/all";
     }

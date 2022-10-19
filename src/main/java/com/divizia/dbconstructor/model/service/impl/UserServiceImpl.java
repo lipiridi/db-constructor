@@ -3,6 +3,7 @@ package com.divizia.dbconstructor.model.service.impl;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.repo.UserRepository;
 import com.divizia.dbconstructor.model.service.UserService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAll(Sort.by("id"));
     }
 }

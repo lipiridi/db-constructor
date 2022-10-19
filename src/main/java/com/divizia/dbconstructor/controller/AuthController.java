@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.controller;
 
-import com.divizia.dbconstructor.model.entity.Role;
+import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.net.http.HttpRequest;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Controller

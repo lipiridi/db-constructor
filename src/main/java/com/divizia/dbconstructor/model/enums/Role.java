@@ -1,4 +1,4 @@
-package com.divizia.dbconstructor.model.entity;
+package com.divizia.dbconstructor.model.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

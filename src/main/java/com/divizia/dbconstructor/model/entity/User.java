@@ -1,5 +1,8 @@
 package com.divizia.dbconstructor.model.entity;
 
+import com.divizia.dbconstructor.model.enums.Role;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -7,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,6 +35,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role can't be null")
     private Role role;
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<CustomTable> customTables;
 
     public User() {
         this.role = Role.USER;
