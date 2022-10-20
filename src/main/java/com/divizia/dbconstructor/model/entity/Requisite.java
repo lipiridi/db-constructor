@@ -1,7 +1,7 @@
 package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
-import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import lombok.*;
 import org.hibernate.Hibernate;

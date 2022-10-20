@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.model.service;
 
-import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.Requisite;
 
 import java.util.List;

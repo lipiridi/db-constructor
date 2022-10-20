@@ -33,7 +33,7 @@ public class UserRestController {
     ResponseEntity<Map<String, Object>> all() {
         Map<String, Object> answer = new HashMap<>();
         answer.put("result", "OK");
-        answer.put("users", userService.findAll());
+        answer.put("entity", userService.findAll());
 
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class UserRestController {
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
             answer.put("result", "OK");
-            answer.put("user", optionalUser.get());
+            answer.put("entity", optionalUser.get());
             return new ResponseEntity<>(answer, HttpStatus.OK);
         }
     }
@@ -71,7 +71,7 @@ public class UserRestController {
 
 
             answer.put("result", "OK");
-            answer.put("user", userService.saveAndFlush(user));
+            answer.put("entity", userService.saveAndFlush(user));
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
     }

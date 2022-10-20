@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +34,7 @@ public class CustomTable implements Serializable, Updatable<CustomTable> {
 
     @OneToMany(mappedBy = "customTable", orphanRemoval = true)
     @ToString.Exclude
+    @JsonIgnore
     private Set<Requisite> requisites;
 
     @Override
@@ -53,7 +55,7 @@ public class CustomTable implements Serializable, Updatable<CustomTable> {
         if (!id.equals(other.id))
             return this;
 
-        if (other.name != null && !other.name.isBlank())
+        if (other.name != null)
             name = other.name;
         if (other.author != null)
             author = other.author;

@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.model.repo;
 
-import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
@@ -21,6 +22,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@RequiredArgsConstructor
 @Entity
 @Table(name = "a_users")
 public class User implements Updatable<User> {
@@ -60,7 +62,7 @@ public class User implements Updatable<User> {
         if (!id.equals(other.id))
             return this;
 
-        if (other.password != null && !other.password.isBlank() && !other.password.equals(password))
+        if (other.password != null && !other.password.equals(password))
             password = new BCryptPasswordEncoder(12).encode(other.password);
         if (other.role != null)
             role = other.role;

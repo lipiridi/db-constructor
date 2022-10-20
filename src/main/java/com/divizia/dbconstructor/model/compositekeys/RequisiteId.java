@@ -1,4 +1,4 @@
-package com.divizia.dbconstructor.model.compositeKeys;
+package com.divizia.dbconstructor.model.compositekeys;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

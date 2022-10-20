@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.model.service.impl;
 
-import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.repo.RequisiteRepository;
 import com.divizia.dbconstructor.model.service.RequisiteService;
@@ -25,7 +25,7 @@ public class RequisiteServiceImpl implements RequisiteService {
                 String.format("alter table %s add %s %s",
                         requisite.getCustomTable().getId(),
                         requisite.getId(),
-                        requisite.getType()));
+                        requisite.getType().dbName));
 
         return requisiteRepository.saveAndFlush(requisite);
     }

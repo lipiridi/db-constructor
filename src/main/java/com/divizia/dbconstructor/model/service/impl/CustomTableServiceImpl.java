@@ -25,7 +25,9 @@ public class CustomTableServiceImpl implements CustomTableService {
             customTable.setId("c_" + customTable.getId());
 
         jdbcTemplate.execute(
-                String.format("create table if not exists %1$s (id bigserial constraint %1$s_pkey primary key)",
+                String.format("create table if not exists %1$s (" +
+                                "id bigserial constraint %1$s_pkey primary key," +
+                                "update_time timestamp default current_timestamp not null)",
                         customTable.getId()));
 
         return customTableRepository.saveAndFlush(customTable);

@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.controller;
 
-import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.entity.User;
@@ -69,7 +69,7 @@ public class CustomTableController {
     public String getEditWithValues(Model model, CustomTable customTable) {
         Requisite requisite = new Requisite();
         requisite.setCustomTable(customTable);
-        requisite.setType(RequisiteType.VARCHAR);
+        requisite.setType(RequisiteType.STRING);
 
         return getEditWithValues(model, customTable, requisite);
     }
