@@ -87,7 +87,10 @@ public class CustomTableController {
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, customTable);
 
-        customTableService.findById(id).ifPresent(customTable::updateAllowed);
+        Optional<CustomTable> foundInDB = customTableService.findById(id);
+        if (foundInDB.isPresent())
+            customTable = foundInDB.get().updateAllowed(customTable);
+
         customTableService.saveAndFlush(customTable);
 
         return "redirect:/tables/all";

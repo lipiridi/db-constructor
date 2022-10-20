@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
+import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.service.UserService;
@@ -47,7 +48,10 @@ public class UserController {
             return "users/edit";
         }
 
-        userService.findById(user.getId()).ifPresent(user::updateAllowed);
+        Optional<User> foundInDB = userService.findById(id);
+        if (foundInDB.isPresent())
+            user = foundInDB.get().updateAllowed(user);
+
         userService.saveAndFlush(user);
 
         return "redirect:/users/all";

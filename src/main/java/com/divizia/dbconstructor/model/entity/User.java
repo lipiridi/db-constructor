@@ -42,10 +42,6 @@ public class User implements Updatable<User> {
     @JsonIgnore
     private Set<CustomTable> customTables;
 
-    public User() {
-        this.role = Role.USER;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,11 +56,16 @@ public class User implements Updatable<User> {
     }
 
     @Override
-    public void updateAllowed(User other) {
-        if (!password.equals(other.getPassword()))
-            password = new BCryptPasswordEncoder(12).encode(password);
+    public User updateAllowed(User other) {
+        if (!id.equals(other.id))
+            return this;
 
-        customTables = other.getCustomTables();
+        if (other.password != null && !other.password.isBlank() && !other.password.equals(password))
+            password = new BCryptPasswordEncoder(12).encode(other.password);
+        if (other.role != null)
+            role = other.role;
+
+        return this;
     }
 
 }

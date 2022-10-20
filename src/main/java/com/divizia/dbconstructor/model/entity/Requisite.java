@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.model.entity;
 
+import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.compositeKeys.RequisiteId;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "a_requisites")
 @IdClass(RequisiteId.class)
-public class Requisite {
+public class Requisite implements Updatable<Requisite> {
 
     @Id
     @Pattern(regexp = "^\\w+$", message = "The requisite id can contain only word character [a-zA-Z0-9_]")
@@ -46,5 +47,16 @@ public class Requisite {
     @Override
     public int hashCode() {
         return Objects.hash(id, customTable);
+    }
+
+    @Override
+    public Requisite updateAllowed(Requisite other) {
+        if (!id.equals(other.id))
+            return this;
+
+        if (other.name != null && !other.name.isBlank())
+            name = other.name;
+
+        return this;
     }
 }

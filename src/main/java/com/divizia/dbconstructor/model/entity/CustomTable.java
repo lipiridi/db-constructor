@@ -49,7 +49,15 @@ public class CustomTable implements Serializable, Updatable<CustomTable> {
     }
 
     @Override
-    public void updateAllowed(CustomTable other) {
-        requisites = other.getRequisites();
+    public CustomTable updateAllowed(CustomTable other) {
+        if (!id.equals(other.id))
+            return this;
+
+        if (other.name != null && !other.name.isBlank())
+            name = other.name;
+        if (other.author != null)
+            author = other.author;
+
+        return this;
     }
 }

@@ -63,7 +63,12 @@ public class UserRestController {
             answer.put("message", result.getAllErrors().stream().map(x -> x.getDefaultMessage() + "; ").collect(Collectors.joining()));
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
-            userService.findById(user.getId()).ifPresent(user::updateAllowed);
+            Optional<User> foundInDB = userService.findById(user.getId());
+            if (foundInDB.isPresent())
+                user = foundInDB.get().updateAllowed(user);
+            else
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+
 
             answer.put("result", "OK");
             answer.put("user", userService.saveAndFlush(user));
