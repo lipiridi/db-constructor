@@ -21,7 +21,7 @@ Stack:
 <details>
 <summary>Images (click to open):</summary>
 
-![](C:\Users\Admin\Pictures\Screenshot_1.png)
+<img src="C:\Users\Admin\Pictures\Screenshot_1.png"/>
 ![](C:\Users\Admin\Pictures\Screenshot_2.png)
 ![](C:\Users\Admin\Pictures\Screenshot_3.png)
 ![](C:\Users\Admin\Pictures\Screenshot_4.png)
