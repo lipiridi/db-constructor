@@ -21,9 +21,9 @@ Stack:
 <details>
 <summary>Images (click to open):</summary>
 
-<img src="C:\Users\Admin\Pictures\Screenshot_1.png"/>
-![](C:\Users\Admin\Pictures\Screenshot_2.png)
-![](C:\Users\Admin\Pictures\Screenshot_3.png)
-![](C:\Users\Admin\Pictures\Screenshot_4.png)
-![](C:\Users\Admin\Pictures\Screenshot_5.png)
+![Screenshot_1](https://user-images.githubusercontent.com/60580660/197292339-93db12f7-1c39-43a4-b333-2060e2eda7ea.png)
+![Screenshot_2](https://user-images.githubusercontent.com/60580660/197292346-9bffcedb-8627-40fd-ab03-91168e92d1dd.png)
+![Screenshot_3](https://user-images.githubusercontent.com/60580660/197292347-9c591fcb-ec41-4378-bf52-ae2b96afd2e6.png)
+![Screenshot_4](https://user-images.githubusercontent.com/60580660/197292349-089c1474-be60-438f-b330-e436aca3f7ae.png)
+![Screenshot_5](https://user-images.githubusercontent.com/60580660/197292350-a098d72f-04b3-490a-bdef-bd69010ced68.png)
 </details>
