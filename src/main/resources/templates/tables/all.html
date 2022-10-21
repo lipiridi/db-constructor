@@ -35,7 +35,7 @@
             <td th:text="${table.author.id}"></td>
             <td th:text="${table.requisites.size()}"></td>
             <td>
-                <form th:action="@{'{id}/records/all'(id=${table.id})}">
+                <form th:action="@{'/records/{id}/all'(id=${table.id})}">
                     <button type="submit" class="btn btn-success">Records</button>
                 </form>
             </td>

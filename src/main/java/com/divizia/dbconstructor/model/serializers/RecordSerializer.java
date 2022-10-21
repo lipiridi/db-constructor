@@ -25,7 +25,7 @@ public class RecordSerializer extends StdSerializer<Record> {
 
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
-        jgen.writeObjectField("updateTime", value.getUpdateTime().format(DateTimeFormatter.ISO_DATE_TIME));
+        jgen.writeObjectField("updateTime", value.getUpdateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
 
         for (Map.Entry<String, Object> entry : value.getRequisiteValueMap().entrySet())
             jgen.writeObjectField(entry.getKey(), entry.getValue());

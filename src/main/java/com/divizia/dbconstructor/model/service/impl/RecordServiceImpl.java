@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,8 @@ public class RecordServiceImpl implements RecordService {
         });
 
         String query = String.format(
-                        "INSERT INTO c_books(%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s RETURNING id, update_time",
+                        "INSERT INTO %s(%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s RETURNING id, update_time",
+                        record.getCustomTableId(),
                         columns,
                         values,
                         conflict);
@@ -93,7 +93,7 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return recordList;
 
-        String query = String.format("select * from %s", customTableId);
+        String query = String.format("select * from %s order by id", customTableId);
         log.info(query);
         List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())

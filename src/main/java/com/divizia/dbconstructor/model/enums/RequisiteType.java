@@ -1,9 +1,5 @@
 package com.divizia.dbconstructor.model.enums;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-import java.util.Map;
-
 public enum RequisiteType {
 
     STRING("varchar"),

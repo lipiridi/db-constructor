@@ -1,15 +1,10 @@
 package com.divizia.dbconstructor.model.serializers;
 
 import com.divizia.dbconstructor.model.entity.Record;
-import com.divizia.dbconstructor.model.enums.RequisiteType;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 import java.util.HashMap;

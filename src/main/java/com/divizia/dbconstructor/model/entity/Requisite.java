@@ -3,7 +3,10 @@ package com.divizia.dbconstructor.model.entity;
 import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;

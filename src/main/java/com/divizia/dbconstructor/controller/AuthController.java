@@ -1,7 +1,7 @@
 package com.divizia.dbconstructor.controller;
 
-import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.entity.User;
+import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;

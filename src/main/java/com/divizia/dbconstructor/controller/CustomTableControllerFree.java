@@ -13,7 +13,6 @@ public class CustomTableControllerFree {
 
     private final CustomTableService customTableService;
 
-
     public CustomTableControllerFree(CustomTableService customTableService) {
         this.customTableService = customTableService;
     }

@@ -8,7 +8,6 @@ import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import com.divizia.dbconstructor.model.service.UserService;
-import lombok.extern.log4j.Log4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;

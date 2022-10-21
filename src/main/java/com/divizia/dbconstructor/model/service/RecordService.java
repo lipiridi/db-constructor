@@ -1,7 +1,6 @@
 package com.divizia.dbconstructor.model.service;
 
 import com.divizia.dbconstructor.model.entity.Record;
-import com.divizia.dbconstructor.model.entity.User;
 
 import java.util.List;
 import java.util.Optional;

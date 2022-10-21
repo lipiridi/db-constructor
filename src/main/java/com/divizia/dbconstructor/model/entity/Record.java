@@ -3,7 +3,6 @@ package com.divizia.dbconstructor.model.entity;
 import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.serializers.RecordDeserializer;
 import com.divizia.dbconstructor.model.serializers.RecordSerializer;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;

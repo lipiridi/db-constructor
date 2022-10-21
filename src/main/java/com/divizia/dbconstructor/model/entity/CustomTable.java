@@ -2,9 +2,11 @@ package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

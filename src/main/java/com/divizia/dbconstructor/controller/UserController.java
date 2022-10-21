@@ -1,11 +1,9 @@
 package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
-import com.divizia.dbconstructor.model.entity.CustomTable;
-import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.entity.User;
+import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

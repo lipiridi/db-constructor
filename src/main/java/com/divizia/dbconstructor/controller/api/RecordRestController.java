@@ -1,15 +1,10 @@
 package com.divizia.dbconstructor.controller.api;
 
 import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
-import com.divizia.dbconstructor.exceptions.UserNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
-import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.service.RecordService;
-import com.divizia.dbconstructor.model.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
