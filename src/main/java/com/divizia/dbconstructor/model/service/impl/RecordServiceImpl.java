@@ -6,6 +6,7 @@ import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.repo.CustomTableRepository;
 import com.divizia.dbconstructor.model.service.RecordService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RecordServiceImpl implements RecordService {
 
     private final CustomTableRepository customTableRepository;
@@ -38,11 +40,13 @@ public class RecordServiceImpl implements RecordService {
             conflict.append(",").append(x).append("=EXCLUDED.").append(x);
         });
 
-        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(String.format(
+        String query = String.format(
                         "INSERT INTO c_books(%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s RETURNING id, update_time",
                         columns,
                         values,
-                        conflict));
+                        conflict);
+        log.info(query);
+        List<Map<String, Object>> mapList = jdbcTemplate.queryForList(query);
         Map<String, Object> result = mapList.get(0);
 
         record.setId((Long) result.get("id"));
@@ -53,7 +57,9 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void deleteById(String customTableId, Long recordId) {
-        jdbcTemplate.execute(String.format("delete from %s where id = %s", customTableId, recordId));
+        String query = String.format("delete from %s where id = %s", customTableId, recordId);
+        log.info(query);
+        jdbcTemplate.execute(query);
     }
 
     @Override
@@ -65,8 +71,9 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return optionalRecord;
 
-        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(
-                String.format("select * from %s where id = %s", customTableId, recordId));
+        String query = String.format("select * from %s where id = %s", customTableId, recordId);
+        log.info(query);
+        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())
             return optionalRecord;
 
@@ -86,8 +93,9 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return recordList;
 
-        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(
-                String.format("select * from %s", customTableId));
+        String query = String.format("select * from %s", customTableId);
+        log.info(query);
+        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())
             return recordList;
 

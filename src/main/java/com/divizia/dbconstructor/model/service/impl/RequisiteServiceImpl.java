@@ -5,6 +5,7 @@ import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.repo.RequisiteRepository;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RequisiteServiceImpl implements RequisiteService {
 
     private final RequisiteRepository requisiteRepository;
@@ -21,11 +23,12 @@ public class RequisiteServiceImpl implements RequisiteService {
     @Override
     public Requisite saveAndFlush(Requisite requisite) {
 
-        jdbcTemplate.execute(
-                String.format("alter table %s add %s %s",
+        String query = String.format("alter table %s add %s %s",
                         requisite.getCustomTable().getId(),
                         requisite.getId(),
-                        requisite.getType().dbName));
+                        requisite.getType().dbName);
+        log.info(query);
+        jdbcTemplate.execute(query);
 
         return requisiteRepository.saveAndFlush(requisite);
     }
@@ -33,10 +36,11 @@ public class RequisiteServiceImpl implements RequisiteService {
     @Override
     public void deleteById(RequisiteId requisiteId) {
 
-        jdbcTemplate.execute(
-                String.format("alter table %s drop column %s",
+        String query = String.format("alter table %s drop column %s",
                         requisiteId.getCustomTable(),
-                        requisiteId.getId()));
+                        requisiteId.getId());
+        log.info(query);
+        jdbcTemplate.execute(query);
 
         requisiteRepository.deleteById(requisiteId);
     }
