@@ -2,6 +2,8 @@ package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
+import com.divizia.dbconstructor.model.entity.Requisite;
+import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RecordService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("SameReturnValue")
@@ -77,7 +80,15 @@ public class RecordController {
     }
 
     private void addStandardData(String customTableId, Model model) {
-        model.addAttribute("requisites", requisiteService.findByCustomTableId(customTableId));
+        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        Map<String, List<Record>> requisitesRecordsMap = new HashMap<>();
+        requisites.forEach(x -> {
+            if (x.getType() == RequisiteType.FOREIGN)
+                requisitesRecordsMap.put(x.getId(), recordService.findAll(x.getForeignTableId()));
+        });
+
+        model.addAttribute("requisites", requisites);
+        model.addAttribute("requisitesRecordsMap", requisitesRecordsMap);
         model.addAttribute("customTable", customTableService.findById(customTableId).orElseThrow());
         model.addAttribute("formatNormal", formatNormal);
         model.addAttribute("formatISO", formatISO);

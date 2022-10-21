@@ -2,6 +2,7 @@ package com.divizia.dbconstructor.model.service.impl;
 
 import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.Requisite;
+import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.repo.RequisiteRepository;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,19 @@ public class RequisiteServiceImpl implements RequisiteService {
                         requisite.getCustomTable().getId(),
                         requisite.getId(),
                         requisite.getType().dbName);
+
+        if (requisite.getType() == RequisiteType.FOREIGN) {
+            String fkQuery = String.format("alter table %s add constraint %s_%s_id_fkey foreign key (%s) references %s " +
+                            "on update cascade on delete cascade",
+                    requisite.getCustomTable().getId(),
+                    requisite.getCustomTable().getId(),
+                    requisite.getForeignTableId(),
+                    requisite.getId(),
+                    requisite.getForeignTableId());
+
+            query = query + "; " + fkQuery ;
+        }
+
         log.info(query);
         jdbcTemplate.execute(query);
 

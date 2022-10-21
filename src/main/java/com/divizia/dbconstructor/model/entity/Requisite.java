@@ -38,6 +38,9 @@ public class Requisite implements Updatable<Requisite> {
     @Enumerated(EnumType.STRING)
     private RequisiteType type;
 
+    @Column(name = "foreign_table_id")
+    private String foreignTableId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +62,8 @@ public class Requisite implements Updatable<Requisite> {
 
         if (other.name != null && !other.name.isBlank())
             name = other.name;
+        if (other.foreignTableId != null)
+            foreignTableId = other.foreignTableId;
 
         return this;
     }

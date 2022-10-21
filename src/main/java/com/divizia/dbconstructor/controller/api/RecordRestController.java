@@ -2,6 +2,7 @@ package com.divizia.dbconstructor.controller.api;
 
 import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
+import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.RecordService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
 public class RecordRestController {
 
     private final RecordService recordService;
+    private final RecordControllerDeserializer recordControllerDeserializer;
 
-    RecordRestController(RecordService recordService) {
+    RecordRestController(RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
         this.recordService = recordService;
+        this.recordControllerDeserializer = recordControllerDeserializer;
     }
 
     @GetMapping("{customTableId}")
@@ -56,7 +59,7 @@ public class RecordRestController {
     @PostMapping("{customTableId}")
     ResponseEntity<Map<String, Object>> save(@PathVariable String customTableId, @Valid @RequestBody Record record, BindingResult result) {
         customTableId = checkCustomTableId(customTableId);
-        record.setCustomTableId(customTableId);
+        record = recordControllerDeserializer.checkRequisites(customTableId, record);
 
         Map<String, Object> answer = new HashMap<>();
 

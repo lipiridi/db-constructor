@@ -6,8 +6,15 @@
     <title>Edit table</title>
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        function hideForeignDiv() {
+            var requisiteIsForeign = [[${requisiteIsForeign}]];
+            document.getElementById("foreignDiv").hidden = !requisiteIsForeign;
+        }
+    </script>
 </head>
-<body>
+<body onload="hideForeignDiv()">
 
 <div class="text-center">
     <h1>Edit table</h1>
@@ -40,12 +47,13 @@
 
         <div class="col-auto">
             <label class="visually-hidden" for="id">Id</label>
-            <input class="form-control" id="id" placeholder="Id" name="id" type="text" th:value="${requisite.id}">
+            <input class="form-control" id="id" name="id" placeholder="Id" th:value="${requisite.id}" type="text">
         </div>
 
         <div class="col-auto">
             <label class="visually-hidden" for="name">Name</label>
-            <input class="form-control" id="name" placeholder="Name" name="name" type="text" th:value="${requisite.name}">
+            <input class="form-control" id="name" name="name" placeholder="Name" th:value="${requisite.name}"
+                   type="text">
         </div>
 
         <div class="col-auto">
@@ -55,6 +63,29 @@
                         th:selected="${requisiteType == requisite.type}"
                         th:text="${requisiteType}"
                         th:value="${requisiteType}">
+            </select>
+
+            <script>
+                $("#type").change(function () {
+                    if ($('#type').val() === 'FOREIGN') {
+                        $("#foreignDiv").removeAttr('hidden');
+                    } else {
+                        $("#foreignDiv").attr('hidden', 'hidden');
+                        $("#foreignTableId").val("");
+                    }
+                })
+            </script>
+
+        </div>
+
+        <div class="col-auto" id="foreignDiv">
+            <label class="visually-hidden" for="foreignTableId">Type</label>
+            <select class="form-select" id="foreignTableId" name="foreignTableId">
+                <option value="">Choose table</option>
+                <option th:each="otherTable: ${otherTables}"
+                        th:selected="${otherTable.id == requisite.foreignTableId}"
+                        th:text="${otherTable.name}"
+                        th:value="${otherTable.id}">
             </select>
         </div>
 

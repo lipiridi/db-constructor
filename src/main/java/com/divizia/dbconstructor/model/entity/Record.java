@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @JsonSerialize(using = RecordSerializer.class)
 @JsonDeserialize(using = RecordDeserializer.class)
@@ -37,5 +36,12 @@ public class Record implements Updatable<Record> {
         });
 
         return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("id=" + id);
+        requisiteValueMap.forEach((x, y) -> stringBuilder.append(",\n").append(x).append("=").append(y));
+        return stringBuilder.toString();
     }
 }

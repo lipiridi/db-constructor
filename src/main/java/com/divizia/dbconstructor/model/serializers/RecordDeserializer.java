@@ -31,7 +31,7 @@ public class RecordDeserializer extends StdDeserializer<Record> {
 
         mainNode.fieldNames().forEachRemaining(x -> {
             if (x.equals("id"))
-                record.setId((Long) mainNode.get("id").numberValue());
+                record.setId(mainNode.get("id").asLong());
             else {
                 addToMap(requisiteValueMap, mainNode, x);
             }
@@ -44,7 +44,6 @@ public class RecordDeserializer extends StdDeserializer<Record> {
 
     private void addToMap(Map<String, Object> requisiteValueMap, JsonNode mainNode, String x) {
         JsonNode node = mainNode.get(x);
-        if (node.isNull()) return;
 
         if (node.isInt()) {
             requisiteValueMap.put(x, node.asInt());
@@ -54,6 +53,8 @@ public class RecordDeserializer extends StdDeserializer<Record> {
             requisiteValueMap.put(x, node.asDouble());
         } else if (node.isBoolean()) {
             requisiteValueMap.put(x, node.asBoolean());
+        } else if (node.isNull()) {
+            requisiteValueMap.put(x, null);
         } else {
             requisiteValueMap.put(x, node.asText());
         }

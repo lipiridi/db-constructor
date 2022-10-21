@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class RecordControllerDeserializer {
@@ -64,12 +66,30 @@ public class RecordControllerDeserializer {
             }
 
             requisiteValueMap.put(requisite.getId(), result);
+        } else if (requisite.getType() == RequisiteType.FOREIGN) {
+            Long result = null;
+
+            try {
+                result = Long.parseLong(s);
+            } catch (NumberFormatException ignored) {
+            }
+
+            requisiteValueMap.put(requisite.getId(), result);
         } else if (requisite.getType() == RequisiteType.BOOLEAN) {
             requisiteValueMap.put(requisite.getId(), Boolean.parseBoolean(s));
         } else {
-            requisiteValueMap.put(requisite.getId(), s == null ? "" : s);
+            requisiteValueMap.put(requisite.getId(), s);
         }
 
     }
 
+    public Record checkRequisites(String customTableId, Record record) {
+        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        Set<String> requisitesId = requisites.stream().map(Requisite::getId).collect(Collectors.toSet());
+        record.setCustomTableId(customTableId);
+
+        record.getRequisiteValueMap().entrySet().removeIf(x -> !requisitesId.contains(x.getKey()));
+
+        return record;
+    }
 }

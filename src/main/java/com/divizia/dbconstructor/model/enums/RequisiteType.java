@@ -6,7 +6,8 @@ public enum RequisiteType {
     BOOLEAN("boolean"),
     INTEGER("integer"),
     LONG("bigint"),
-    DOUBLE("double precision");
+    DOUBLE("double precision"),
+    FOREIGN("bigint");
 
     public final String dbName;
 

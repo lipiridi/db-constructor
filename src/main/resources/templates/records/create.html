@@ -42,6 +42,14 @@
                            th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="number">
+                    <select class="form-select" th:case="'FOREIGN'" th:id="${requisite.id}"
+                            th:name="${requisite.id}">
+                        <option value="">Choose here</option>
+                        <option th:each="otherRecord: ${requisitesRecordsMap.get(requisite.id)}"
+                                th:selected="${otherRecord.id == record.requisiteValueMap.get(requisite.id)}"
+                                th:text="${otherRecord}"
+                                th:value="${otherRecord.id}">
+                    </select>
                     <input class="form-control" th:case="*" th:id="${requisite.id}" th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="text">
