@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,9 +28,13 @@ public class RecordRestController {
         this.recordControllerDeserializer = recordControllerDeserializer;
     }
 
-    @GetMapping("{customTableId}")
-    ResponseEntity<Map<String, Object>> all(@PathVariable String customTableId) {
+    @GetMapping
+    ResponseEntity<Map<String, Object>> all(@PathParam("customTableId") String customTableId, @PathParam("id") Long id) {
+        if (id != null)
+            return findById(customTableId, id);
         customTableId = checkCustomTableId(customTableId);
+        if (customTableId == null)
+            return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
         answer.put("result", "OK");
@@ -38,9 +43,10 @@ public class RecordRestController {
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
 
-    @GetMapping("{customTableId}/{id}")
-    ResponseEntity<Map<String, Object>> findById(@PathVariable String customTableId, @PathVariable Long id) {
+    ResponseEntity<Map<String, Object>> findById(String customTableId, Long id) {
         customTableId = checkCustomTableId(customTableId);
+        if (customTableId == null)
+            return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
         Optional<Record> optional = recordService.findById(customTableId, id);
@@ -56,9 +62,12 @@ public class RecordRestController {
         }
     }
 
-    @PostMapping("{customTableId}")
-    ResponseEntity<Map<String, Object>> save(@PathVariable String customTableId, @Valid @RequestBody Record record, BindingResult result) {
+    @PostMapping
+    ResponseEntity<Map<String, Object>> save(@PathParam("customTableId") String customTableId, @Valid @RequestBody Record record, BindingResult result) {
         customTableId = checkCustomTableId(customTableId);
+        if (customTableId == null)
+            return nullCustomTableAnswer();
+
         record = recordControllerDeserializer.checkRequisites(customTableId, record);
 
         Map<String, Object> answer = new HashMap<>();
@@ -78,12 +87,16 @@ public class RecordRestController {
         }
     }
 
-    @DeleteMapping("{customTableId}/{id}")
-    ResponseEntity<Map<String, Object>> delete(@PathVariable String customTableId, @PathVariable Long id) {
+    @DeleteMapping
+    ResponseEntity<Map<String, Object>> delete(@PathParam("customTableId") String customTableId, @PathParam("id") Long id) {
         customTableId = checkCustomTableId(customTableId);
+        if (customTableId == null)
+            return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
-        Optional<Record> optional = recordService.findById(customTableId, id);
+        Optional<Record> optional = Optional.empty();
+        if (id != null)
+            optional = recordService.findById(customTableId, id);
 
         if (optional.isEmpty()) {
             answer.put("result", "Error");
@@ -97,7 +110,15 @@ public class RecordRestController {
     }
 
     private String checkCustomTableId(String customTableId) {
+        if (customTableId == null) return null;
         return customTableId.startsWith("c_") ? customTableId : "c_" + customTableId;
+    }
+
+    private ResponseEntity<Map<String, Object>> nullCustomTableAnswer() {
+        Map<String, Object> answer = new HashMap<>();
+        answer.put("result", "Error");
+        answer.put("message", "You didn't specify a customTableId");
+        return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
     }
 
 }

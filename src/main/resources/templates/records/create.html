@@ -29,7 +29,7 @@
                 <th:block th:switch="${requisite.type.name()}">
                     <input class="form-check-input" th:case="'BOOLEAN'" th:id="${requisite.id}"
                            th:name="${requisite.id}"
-                           th:selected="${record.requisiteValueMap.get(requisite.id)}"
+                           th:checked="${record.requisiteValueMap.get(requisite.id)}"
                            type="checkbox"
                            value="true">
                     <input class="form-control" th:case="'INTEGER'" th:id="${requisite.id}" th:name="${requisite.id}"
