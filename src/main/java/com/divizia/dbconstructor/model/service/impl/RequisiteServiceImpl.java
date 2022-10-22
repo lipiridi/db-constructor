@@ -20,9 +20,11 @@ public class RequisiteServiceImpl implements RequisiteService {
 
     private final RequisiteRepository requisiteRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final CustomTableIdChecker customTableIdChecker;
 
     @Override
     public Requisite saveAndFlush(Requisite requisite) {
+        requisite.setForeignTableId(customTableIdChecker.checkId(requisite.getForeignTableId()));
 
         String query = String.format("alter table %s add %s %s",
                         requisite.getCustomTable().getId(),
@@ -49,6 +51,7 @@ public class RequisiteServiceImpl implements RequisiteService {
 
     @Override
     public void deleteById(RequisiteId requisiteId) {
+        requisiteId.setCustomTable(customTableIdChecker.checkId(requisiteId.getCustomTable()));
 
         String query = String.format("alter table %s drop column %s",
                         requisiteId.getCustomTable(),
@@ -61,11 +64,15 @@ public class RequisiteServiceImpl implements RequisiteService {
 
     @Override
     public Optional<Requisite> findById(RequisiteId requisiteId) {
+        requisiteId.setCustomTable(customTableIdChecker.checkId(requisiteId.getCustomTable()));
+
         return requisiteRepository.findById(requisiteId);
     }
 
     @Override
     public List<Requisite> findByCustomTableId(String customTableId) {
+        customTableId = customTableIdChecker.checkId(customTableId);
+
         return requisiteRepository.findByCustomTableId(customTableId);
     }
 

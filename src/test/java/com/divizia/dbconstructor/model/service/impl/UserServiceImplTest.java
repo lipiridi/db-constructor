@@ -4,11 +4,11 @@ import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -54,6 +54,10 @@ class UserServiceImplTest {
         user.updateAllowed(new User(null, "2222", Role.ADMIN, null));
 
         assertNotEquals(Role.ADMIN, user.getRole());
+
+        user.setCustomTables(null);
+        User finalUser = user;
+        assertThrows(JpaSystemException.class, () -> userService.saveAndFlush(finalUser));
     }
 
     @Test
@@ -85,6 +89,14 @@ class UserServiceImplTest {
 
     @Test
     void findAll() {
-        assertNotNull(userService.findAll());
+        User user = new User(
+                "testUser40",
+                passwordEncoder.encode("1111"),
+                Role.ADMIN,
+                null);
+        user = userService.saveAndFlush(user);
+        userList.add(user);
+
+        assertFalse(userService.findAll().isEmpty());
     }
 }

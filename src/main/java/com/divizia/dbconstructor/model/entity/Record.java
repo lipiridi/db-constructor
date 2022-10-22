@@ -5,7 +5,10 @@ import com.divizia.dbconstructor.model.serializers.RecordDeserializer;
 import com.divizia.dbconstructor.model.serializers.RecordSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Map;

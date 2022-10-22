@@ -4,7 +4,6 @@ import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.RecordService;
-import com.divizia.dbconstructor.model.service.impl.CustomTableIdChecker;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -23,21 +22,17 @@ public class RecordRestController {
 
     private final RecordService recordService;
     private final RecordControllerDeserializer recordControllerDeserializer;
-    private final CustomTableIdChecker customTableIdChecker;
 
-    RecordRestController(RecordService recordService, RecordControllerDeserializer recordControllerDeserializer, CustomTableIdChecker customTableIdChecker) {
+    RecordRestController(RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
         this.recordService = recordService;
         this.recordControllerDeserializer = recordControllerDeserializer;
-        this.customTableIdChecker = customTableIdChecker;
     }
 
     @GetMapping
     ResponseEntity<Map<String, Object>> all(@PathParam("customTableId") String customTableId, @PathParam("id") Long id) {
         if (id != null) return findById(customTableId, id);
 
-        customTableId = customTableIdChecker.checkId(customTableId);
-        if (customTableId == null)
-            return nullCustomTableAnswer();
+        if (customTableId == null) return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
         answer.put("result", "OK");
@@ -47,9 +42,7 @@ public class RecordRestController {
     }
 
     ResponseEntity<Map<String, Object>> findById(String customTableId, Long id) {
-        customTableId = customTableIdChecker.checkId(customTableId);
-        if (customTableId == null)
-            return nullCustomTableAnswer();
+        if (customTableId == null) return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
         Optional<Record> optional = recordService.findById(customTableId, id);
@@ -67,9 +60,7 @@ public class RecordRestController {
 
     @PostMapping
     ResponseEntity<Map<String, Object>> save(@PathParam("customTableId") String customTableId, @Valid @RequestBody Record record, BindingResult result) {
-        customTableId = customTableIdChecker.checkId(customTableId);
-        if (customTableId == null)
-            return nullCustomTableAnswer();
+        if (customTableId == null) return nullCustomTableAnswer();
 
         record = recordControllerDeserializer.checkRequisites(customTableId, record);
 
@@ -92,9 +83,7 @@ public class RecordRestController {
 
     @DeleteMapping
     ResponseEntity<Map<String, Object>> delete(@PathParam("customTableId") String customTableId, @PathParam("id") Long id) {
-        customTableId = customTableIdChecker.checkId(customTableId);
-        if (customTableId == null)
-            return nullCustomTableAnswer();
+        if (customTableId == null) return nullCustomTableAnswer();
 
         Map<String, Object> answer = new HashMap<>();
         Optional<Record> optional = Optional.empty();

@@ -23,9 +23,11 @@ public class RecordServiceImpl implements RecordService {
 
     private final CustomTableRepository customTableRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final CustomTableIdChecker customTableIdChecker;
 
     @Override
     public Record saveAndFlush(Record record) {
+        record.setCustomTableId(customTableIdChecker.checkId(record.getCustomTableId()));
 
         Long id = record.getId();
         String idString = id == null || id == 0 ? "default" : id.toString();
@@ -33,11 +35,13 @@ public class RecordServiceImpl implements RecordService {
         StringBuilder columns = new StringBuilder("id");
         StringBuilder values = new StringBuilder(idString);
         StringBuilder conflict = new StringBuilder("update_time=EXCLUDED.update_time");
-        record.getRequisiteValueMap().forEach((x, y) -> {
-            columns.append(",").append(x);
-            values.append(",").append(RequisiteType.toStringForDB(y));
-            conflict.append(",").append(x).append("=EXCLUDED.").append(x);
-        });
+        if (record.getRequisiteValueMap() != null) {
+            record.getRequisiteValueMap().forEach((x, y) -> {
+                columns.append(",").append(x);
+                values.append(",").append(RequisiteType.toStringForDB(y));
+                conflict.append(",").append(x).append("=EXCLUDED.").append(x);
+            });
+        }
 
         String query = String.format(
                         "INSERT INTO %s(%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s RETURNING id, update_time",
@@ -57,6 +61,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void deleteById(String customTableId, Long recordId) {
+        customTableId = customTableIdChecker.checkId(customTableId);
+
         String query = String.format("delete from %s where id = %s", customTableId, recordId);
         log.info(query);
         jdbcTemplate.execute(query);
@@ -64,6 +70,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Optional<Record> findById(String customTableId, Long recordId) {
+        customTableId = customTableIdChecker.checkId(customTableId);
 
         Optional<Record> optionalRecord = Optional.empty();
 
@@ -86,6 +93,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<Record> findAll(String customTableId) {
+        customTableId = customTableIdChecker.checkId(customTableId);
 
         List<Record> recordList = new ArrayList<>();
 
