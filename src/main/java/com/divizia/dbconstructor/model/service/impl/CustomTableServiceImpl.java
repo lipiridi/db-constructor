@@ -19,12 +19,11 @@ public class CustomTableServiceImpl implements CustomTableService {
 
     private final CustomTableRepository customTableRepository;
     private final JdbcTemplate jdbcTemplate;
+    private final CustomTableIdChecker customTableIdChecker;
 
     @Override
     public CustomTable saveAndFlush(CustomTable customTable) {
-
-        if (!customTable.getId().startsWith("c_"))
-            customTable.setId("c_" + customTable.getId());
+        customTable.setId(customTableIdChecker.checkId(customTable.getId()));
 
         String query = String.format("create table if not exists %1$s (" +
                                 "id bigserial constraint %1$s_pkey primary key," +
@@ -38,6 +37,7 @@ public class CustomTableServiceImpl implements CustomTableService {
 
     @Override
     public void deleteById(String id) {
+        id = customTableIdChecker.checkId(id);
 
         String query = String.format("drop table if exists %s", id);
         log.info(query);
@@ -48,6 +48,8 @@ public class CustomTableServiceImpl implements CustomTableService {
 
     @Override
     public Optional<CustomTable> findById(String id) {
+        id = customTableIdChecker.checkId(id);
+
         return customTableRepository.findById(id);
     }
 
@@ -55,4 +57,5 @@ public class CustomTableServiceImpl implements CustomTableService {
     public List<CustomTable> findAll() {
         return customTableRepository.findAll(Sort.by("id"));
     }
+
 }

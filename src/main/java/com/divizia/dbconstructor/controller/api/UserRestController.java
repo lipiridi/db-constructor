@@ -37,7 +37,7 @@ public class UserRestController {
 
         Map<String, Object> answer = new HashMap<>();
         answer.put("result", "OK");
-        answer.put("entity", userService.findAll());
+        answer.put("body", userService.findAll());
 
         return new ResponseEntity<>(answer, HttpStatus.OK);
     }
@@ -48,11 +48,11 @@ public class UserRestController {
 
         if (optionalUser.isEmpty()) {
             answer.put("result", "Error");
-            answer.put("message", new UserNotFoundException(id).getMessage());
+            answer.put("body", new UserNotFoundException(id).getMessage());
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
             answer.put("result", "OK");
-            answer.put("entity", optionalUser.get());
+            answer.put("body", optionalUser.get());
             return new ResponseEntity<>(answer, HttpStatus.OK);
         }
     }
@@ -63,7 +63,7 @@ public class UserRestController {
 
         if (result.hasErrors()) {
             answer.put("result", "Error");
-            answer.put("message", result.getAllErrors().stream().map(x -> x.getDefaultMessage() + "; ").collect(Collectors.joining()));
+            answer.put("body", result.getAllErrors().stream().map(x -> x.getDefaultMessage() + "; ").collect(Collectors.joining()));
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
             Optional<User> foundInDB = userService.findById(user.getId());
@@ -74,7 +74,7 @@ public class UserRestController {
 
 
             answer.put("result", "OK");
-            answer.put("entity", userService.saveAndFlush(user));
+            answer.put("body", userService.saveAndFlush(user));
             return new ResponseEntity<>(answer, HttpStatus.CREATED);
         }
     }
@@ -88,11 +88,12 @@ public class UserRestController {
 
         if (optionalUser.isEmpty()) {
             answer.put("result", "Error");
-            answer.put("message", new UserNotFoundException(id).getMessage());
+            answer.put("body", new UserNotFoundException(id).getMessage());
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         } else {
             userService.deleteById(id);
             answer.put("result", "OK");
+            answer.put("body", "User " + id + " has been deleted");
             return new ResponseEntity<>(answer, HttpStatus.ACCEPTED);
         }
     }

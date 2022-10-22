@@ -5,16 +5,15 @@ import com.divizia.dbconstructor.model.serializers.RecordDeserializer;
 import com.divizia.dbconstructor.model.serializers.RecordSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonSerialize(using = RecordSerializer.class)
 @JsonDeserialize(using = RecordDeserializer.class)
 public class Record implements Updatable<Record> {

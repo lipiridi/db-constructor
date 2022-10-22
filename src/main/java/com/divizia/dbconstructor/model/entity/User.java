@@ -3,10 +3,7 @@ package com.divizia.dbconstructor.model.entity;
 import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -20,7 +17,8 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "a_users")
 public class User implements Updatable<User> {

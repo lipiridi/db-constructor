@@ -3,10 +3,7 @@ package com.divizia.dbconstructor.model.entity;
 import com.divizia.dbconstructor.model.Updatable;
 import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -17,7 +14,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "a_requisites")
 @IdClass(RequisiteId.class)
