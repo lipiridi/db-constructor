@@ -22,8 +22,9 @@ To start, change connection properties here [src/main/resources/application.prop
 8. Bootstrap
 9. Little JS and jQuery 😄
 
+### Images:
 <details>
-<summary style="font-weight: bold; font-size: 125%">Images (click to open):</summary>
+<summary>Click to open</summary>
 
 ![Screenshot_1](https://user-images.githubusercontent.com/60580660/197292339-93db12f7-1c39-43a4-b333-2060e2eda7ea.png)
 ![Screenshot_2](https://user-images.githubusercontent.com/60580660/197292346-9bffcedb-8627-40fd-ab03-91168e92d1dd.png)
