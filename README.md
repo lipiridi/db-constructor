@@ -13,7 +13,7 @@ To start, change connection properties here [src/main/resources/application.prop
 
 ### Stack:
 1. Java 17
-2. Spring Boot, Wed, JDBC, JPA, Security
+2. Spring Boot, Web, JDBC, JPA, Security
 3. Hibernate
 4. PostgreSQL
 5. JUnit
