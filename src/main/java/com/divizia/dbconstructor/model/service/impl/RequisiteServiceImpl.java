@@ -7,6 +7,7 @@ import com.divizia.dbconstructor.model.repo.RequisiteRepository;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,6 @@ public class RequisiteServiceImpl implements RequisiteService {
 
     @Override
     public List<Requisite> findAll() {
-        return requisiteRepository.findAll();
+        return requisiteRepository.findAll(Sort.by("customTable", "id"));
     }
 }

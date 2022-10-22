@@ -1,4 +1,5 @@
 <!doctype html>
+<!--suppress ALL -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
@@ -12,7 +13,7 @@
 <div class="text-center">
     <h1>Create record in table:</h1>
     <h2 th:text="${customTable.name}"></h2>
-    <p><a class="btn btn-primary" href="all" role="button">Return</a></p>
+    <p><a class="btn btn-primary" th:href="@{'/records/{customTableId}/all'(customTableId=${customTable.id})}" role="button">Return</a></p>
 </div>
 
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
@@ -27,21 +28,26 @@
             <div class="mb-3" th:each="requisite : ${requisites}">
                 <label class="form-label" th:for="${requisite.id}" th:text="${requisite.name}"></label>
                 <th:block th:switch="${requisite.type.name()}">
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <input class="form-check-input" th:case="'BOOLEAN'" th:id="${requisite.id}"
                            th:name="${requisite.id}"
                            th:checked="${record.requisiteValueMap.get(requisite.id)}"
                            type="checkbox"
                            value="true">
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <input class="form-control" th:case="'INTEGER'" th:id="${requisite.id}" th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="number">
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <input class="form-control" th:case="'LONG'" th:id="${requisite.id}" th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="number">
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <input class="form-control" step="0.001" th:case="'DOUBLE'" th:id="${requisite.id}"
                            th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="number">
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <select class="form-select" th:case="'FOREIGN'" th:id="${requisite.id}"
                             th:name="${requisite.id}">
                         <option value="">Choose here</option>
@@ -50,6 +56,7 @@
                                 th:text="${otherRecord}"
                                 th:value="${otherRecord.id}">
                     </select>
+                    <!--suppress HtmlFormInputWithoutLabel -->
                     <input class="form-control" th:case="*" th:id="${requisite.id}" th:name="${requisite.id}"
                            th:value="${record.requisiteValueMap.get(requisite.id)}"
                            type="text">
