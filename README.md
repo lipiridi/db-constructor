@@ -1,5 +1,7 @@
 # DB Constructor
 
+Try it - https://db-constructor.herokuapp.com
+
 It's an application, which can create custom tables in web interface and fill them with records.
 Application send native queries instead of you.
 
