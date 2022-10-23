@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("SameReturnValue")
@@ -57,6 +58,12 @@ public class AuthController {
     @PostMapping("register")
     public String postRegisterPage(@Valid User user, BindingResult result, Model model) {
         if (ControllerHelper.hasErrors(result, model)) {
+            model.addAttribute("roles", Role.values());
+            return "register";
+        }
+
+        if (userService.findById(user.getId()).isPresent()) {
+            model.addAttribute("errorList", List.of("Sorry, user is already exist!"));
             model.addAttribute("roles", Role.values());
             return "register";
         }
