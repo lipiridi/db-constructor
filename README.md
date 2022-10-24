@@ -2,8 +2,9 @@
 
 Try it - https://db-constructor.herokuapp.com
 
-It's an application, which can create custom tables in web interface and fill them with records.
-Application send native queries instead of you.
+It's a web application that allows you to configure the database in a user-friendly interface. That is, you can create a table, add the necessary requisites to it, and then fill it with records.
+All tables are actually created in the database (app sends native queries instead of you).
+The logic and idea are borrowed from the salesforce platform.
 
 Additionally, a REST API interface has been implemented. [Here is the documentation](https://documenter.getpostman.com/view/11215105/2s84DoR3M1)
 
