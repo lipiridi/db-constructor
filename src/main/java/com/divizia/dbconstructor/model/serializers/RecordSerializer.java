@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -25,10 +26,15 @@ public class RecordSerializer extends StdSerializer<Record> {
 
         jgen.writeStartObject();
         jgen.writeNumberField("id", value.getId());
-        jgen.writeObjectField("updateTime", value.getUpdateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        jgen.writeObjectField("updateTime", value.getUpdateTime().format(Formatter.formatNormal));
 
-        for (Map.Entry<String, Object> entry : value.getRequisiteValueMap().entrySet())
-            jgen.writeObjectField(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, Object> entry : value.getRequisiteValueMap().entrySet()) {
+            Object valueObject = entry.getValue();
+            if (valueObject instanceof LocalDateTime)
+                jgen.writeObjectField(entry.getKey(), ((LocalDateTime) valueObject).format(Formatter.formatNormal));
+            else
+                jgen.writeObjectField(entry.getKey(), valueObject);
+        }
 
         jgen.writeEndObject();
     }

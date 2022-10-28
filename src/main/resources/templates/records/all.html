@@ -13,7 +13,8 @@
     <h1>Manage records in table:</h1>
     <h2 th:text="${customTable.name}"></h2>
     <p><a class="btn btn-primary" href="/tables/all" role="button">Return</a></p>
-    <p><a class="btn btn-primary" th:href="@{'/records/{customTableId}/create'(customTableId=${customTable.id})}" role="button">Create new</a></p>
+    <p><a class="btn btn-primary" role="button"
+          th:href="@{'/records/{customTableId}/create'(customTableId=${customTable.id})}">Create new</a></p>
 </div>
 
 <div class="d-flex justify-content-center">
@@ -33,17 +34,22 @@
         <tr th:each="record : ${records}">
             <th scope="row" th:text="${record.id}"></th>
             <td th:each="requisite : ${requisites}">
-                <span th:text="${record.requisiteValueMap.get(requisite.id)}"></span>
+                <th:block th:switch="${requisite.type.name()}">
+                    <span th:case="'LOCAL_DATE_TIME'"
+                          th:text="${record.requisiteValueMap.get(requisite.id) == null ? ''
+                           : record.requisiteValueMap.get(requisite.id).format(formatNormal)}"></span>
+                    <span th:case="*" th:text="${record.requisiteValueMap.get(requisite.id)}"></span>
+                </th:block>
             </td>
             <td th:text="${record.updateTime.format(formatNormal)}"></td>
             <td>
                 <form th:action="@{'edit/{id}'(id=${record.id})}">
-                    <button type="submit" class="btn btn-secondary">Edit</button>
+                    <button class="btn btn-secondary" type="submit">Edit</button>
                 </form>
             </td>
             <td>
-                <form th:action="@{'delete/{id}'(id=${record.id})}" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <form method="post" th:action="@{'delete/{id}'(id=${record.id})}">
+                    <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
         </tr>

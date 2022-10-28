@@ -6,6 +6,10 @@ import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.TemporalQuery;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +70,15 @@ public class RecordControllerDeserializer {
             }
 
             requisiteValueMap.put(requisite.getId(), result);
+        } else if (requisite.getType() == RequisiteType.LOCAL_DATE_TIME) {
+            LocalDateTime result = null;
+
+            try {
+                result = LocalDateTime.parse(s);
+            } catch (DateTimeParseException ignored) {
+            }
+
+            requisiteValueMap.put(requisite.getId(), result);
         } else if (requisite.getType() == RequisiteType.FOREIGN) {
             Long result = null;
 
@@ -84,12 +97,29 @@ public class RecordControllerDeserializer {
     }
 
     public Record checkRequisites(String customTableId, Record record) {
-        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
-        Set<String> requisitesId = requisites.stream().map(Requisite::getId).collect(Collectors.toSet());
         record.setCustomTableId(customTableId);
 
-        record.getRequisiteValueMap().entrySet().removeIf(x -> !requisitesId.contains(x.getKey()));
+        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        Map<String, Requisite> requisitesWithId = requisites.stream().collect(Collectors.toMap(Requisite::getId, x -> x));
+
+        Set<Map.Entry<String, Object>> entrySet = record.getRequisiteValueMap().entrySet();
+        entrySet.removeIf(x -> !requisitesWithId.containsKey(x.getKey()));
+        entrySet.forEach(x -> convertRequisite(requisitesWithId, x));
 
         return record;
+    }
+
+    private void convertRequisite(Map<String, Requisite> requisitesWithId, Map.Entry<String, Object> x) {
+        RequisiteType requisiteType = requisitesWithId.get(x.getKey()).getType();
+        if (requisiteType == RequisiteType.LOCAL_DATE_TIME && x.getValue() instanceof String) {
+            LocalDateTime result = null;
+
+            try {
+                result = LocalDateTime.parse(x.getValue().toString(), Formatter.formatNormal);
+            } catch (DateTimeParseException ignored) {
+            }
+
+            x.setValue(result);
+        }
     }
 }

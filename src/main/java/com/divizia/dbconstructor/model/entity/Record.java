@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
+import com.divizia.dbconstructor.model.serializers.Formatter;
 import com.divizia.dbconstructor.model.serializers.RecordDeserializer;
 import com.divizia.dbconstructor.model.serializers.RecordSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -31,10 +32,7 @@ public class Record implements Updatable<Record> {
         if (!id.equals(other.id) || !customTableId.equals(other.customTableId))
             return this;
 
-        other.requisiteValueMap.forEach((x, y) -> {
-            if (y != null)
-                requisiteValueMap.put(x, y);
-        });
+        requisiteValueMap.putAll(other.requisiteValueMap);
 
         return this;
     }

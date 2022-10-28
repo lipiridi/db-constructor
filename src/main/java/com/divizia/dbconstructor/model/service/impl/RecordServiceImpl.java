@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.model.service.impl;
 
+import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
@@ -53,10 +54,10 @@ public class RecordServiceImpl implements RecordService {
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(query);
         Map<String, Object> result = mapList.get(0);
 
-        record.setId((Long) result.get("id"));
-        record.setUpdateTime(((Timestamp) result.get("update_time")).toLocalDateTime());
+        Long savedId = (Long) result.get("id");
 
-        return record;
+        return findById(record.getCustomTableId(), savedId).orElseThrow(
+                () -> new RecordNotFoundException(record.getCustomTableId(), savedId));
     }
 
     @Override
@@ -121,6 +122,12 @@ public class RecordServiceImpl implements RecordService {
         record.setUpdateTime(((Timestamp) params.get("update_time")).toLocalDateTime());
         params.remove("id");
         params.remove("update_time");
+
+        params.entrySet().forEach(x -> {
+            Object valueObj = x.getValue();
+            if (valueObj instanceof Timestamp)
+                x.setValue(((Timestamp) valueObj).toLocalDateTime());
+        });
 
         record.setRequisiteValueMap(params);
         return record;

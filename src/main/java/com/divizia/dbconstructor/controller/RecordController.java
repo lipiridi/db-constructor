@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
+import com.divizia.dbconstructor.model.serializers.Formatter;
 import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RecordService;
@@ -26,8 +27,6 @@ public class RecordController {
     private final RequisiteService requisiteService;
     private final RecordService recordService;
     private final RecordControllerDeserializer recordControllerDeserializer;
-    private final DateTimeFormatter formatNormal = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-    private final DateTimeFormatter formatISO = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public RecordController(CustomTableService customTableService, RequisiteService requisiteService,
                             RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
@@ -90,8 +89,8 @@ public class RecordController {
         model.addAttribute("requisites", requisites);
         model.addAttribute("requisitesRecordsMap", requisitesRecordsMap);
         model.addAttribute("customTable", customTableService.findById(customTableId).orElseThrow());
-        model.addAttribute("formatNormal", formatNormal);
-        model.addAttribute("formatISO", formatISO);
+        model.addAttribute("formatNormal", Formatter.formatNormal);
+        model.addAttribute("formatISO", Formatter.formatISO);
     }
 
     @PostMapping("{customTableId}/delete/{id}")
