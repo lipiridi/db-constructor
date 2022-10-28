@@ -1,6 +1,5 @@
 package com.divizia.dbconstructor.model.enums;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public enum RequisiteType {

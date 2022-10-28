@@ -1,9 +1,8 @@
 package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
-import com.divizia.dbconstructor.model.serializers.Formatter;
-import com.divizia.dbconstructor.model.serializers.RecordDeserializer;
-import com.divizia.dbconstructor.model.serializers.RecordSerializer;
+import com.divizia.dbconstructor.model.serializers.RecordJsonDeserializer;
+import com.divizia.dbconstructor.model.serializers.RecordJsonSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
@@ -18,8 +17,8 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonSerialize(using = RecordSerializer.class)
-@JsonDeserialize(using = RecordDeserializer.class)
+@JsonSerialize(using = RecordJsonSerializer.class)
+@JsonDeserialize(using = RecordJsonDeserializer.class)
 public class Record implements Updatable<Record> {
 
     private Long id;
