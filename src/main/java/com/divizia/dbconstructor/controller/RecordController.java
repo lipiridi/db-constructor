@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.controller;
 
+import com.divizia.dbconstructor.excel.ExcelSaver;
 import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
@@ -9,6 +10,9 @@ import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RecordService;
 import com.divizia.dbconstructor.model.service.RequisiteService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,6 +100,17 @@ public class RecordController {
     public String postDelete(@PathVariable String customTableId, @PathVariable Long id) {
         recordService.deleteById(customTableId, id);
         return String.format("redirect:/records/%s/all", customTableId);
+    }
+
+    @GetMapping("{customTableId}/export")
+    @ResponseBody
+    public ResponseEntity<Resource> exportFile(@PathVariable String customTableId) {
+        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        List<Record> records = recordService.findAll(customTableId);
+        Resource resource = ExcelSaver.exportRecords(customTableId, requisites, records);
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
     }
 
 }
