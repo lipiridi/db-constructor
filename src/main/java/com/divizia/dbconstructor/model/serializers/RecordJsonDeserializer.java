@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.model.serializers;
 
 import com.divizia.dbconstructor.model.entity.Record;
+import com.divizia.dbconstructor.model.service.impl.IdChecker;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,13 +11,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RecordDeserializer extends StdDeserializer<Record> {
+public class RecordJsonDeserializer extends StdDeserializer<Record> {
 
-    public RecordDeserializer() {
+    public RecordJsonDeserializer() {
         this(null);
     }
 
-    public RecordDeserializer(Class<Record> t) {
+    public RecordJsonDeserializer(Class<Record> t) {
         super(t);
     }
 
@@ -29,11 +30,13 @@ public class RecordDeserializer extends StdDeserializer<Record> {
 
         JsonNode mainNode = jp.getCodec().readTree(jp);
 
-        mainNode.fieldNames().forEachRemaining(x -> {
-            if (x.equals("id"))
-                record.setId(mainNode.get("id").asLong());
+        mainNode.fields().forEachRemaining(x -> {
+            String key = IdChecker.checkId(x.getKey());
+
+            if (key.equals("a_id"))
+                record.setId(x.getValue().asLong());
             else {
-                addToMap(requisiteValueMap, mainNode, x);
+                addToMap(requisiteValueMap, x.getValue(), key);
             }
         });
 
@@ -42,8 +45,8 @@ public class RecordDeserializer extends StdDeserializer<Record> {
         return record;
     }
 
-    private void addToMap(Map<String, Object> requisiteValueMap, JsonNode mainNode, String x) {
-        JsonNode node = mainNode.get(x);
+    private void addToMap(Map<String, Object> requisiteValueMap, JsonNode node, String x) {
+        //JsonNode node = mainNode.get(x);
 
         if (node.isInt()) {
             requisiteValueMap.put(x, node.asInt());

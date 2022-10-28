@@ -24,18 +24,17 @@ public class RecordServiceImpl implements RecordService {
 
     private final CustomTableRepository customTableRepository;
     private final JdbcTemplate jdbcTemplate;
-    private final CustomTableIdChecker customTableIdChecker;
 
     @Override
     public Record saveAndFlush(Record record) {
-        record.setCustomTableId(customTableIdChecker.checkId(record.getCustomTableId()));
+        record.setCustomTableId(IdChecker.checkId(record.getCustomTableId()));
 
         Long id = record.getId();
         String idString = id == null || id == 0 ? "default" : id.toString();
 
-        StringBuilder columns = new StringBuilder("id");
+        StringBuilder columns = new StringBuilder("a_id");
         StringBuilder values = new StringBuilder(idString);
-        StringBuilder conflict = new StringBuilder("update_time=EXCLUDED.update_time");
+        StringBuilder conflict = new StringBuilder("a_update_time=EXCLUDED.a_update_time");
         if (record.getRequisiteValueMap() != null) {
             record.getRequisiteValueMap().forEach((x, y) -> {
                 columns.append(",").append(x);
@@ -45,7 +44,7 @@ public class RecordServiceImpl implements RecordService {
         }
 
         String query = String.format(
-                        "INSERT INTO %s(%s) VALUES (%s) ON CONFLICT (id) DO UPDATE SET %s RETURNING id, update_time",
+                        "INSERT INTO %s(%s) VALUES (%s) ON CONFLICT (a_id) DO UPDATE SET %s RETURNING a_id, a_update_time",
                         record.getCustomTableId(),
                         columns,
                         values,
@@ -54,7 +53,7 @@ public class RecordServiceImpl implements RecordService {
         List<Map<String, Object>> mapList = jdbcTemplate.queryForList(query);
         Map<String, Object> result = mapList.get(0);
 
-        Long savedId = (Long) result.get("id");
+        Long savedId = (Long) result.get("a_id");
 
         return findById(record.getCustomTableId(), savedId).orElseThrow(
                 () -> new RecordNotFoundException(record.getCustomTableId(), savedId));
@@ -62,16 +61,16 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void deleteById(String customTableId, Long recordId) {
-        customTableId = customTableIdChecker.checkId(customTableId);
+        customTableId = IdChecker.checkId(customTableId);
 
-        String query = String.format("delete from %s where id = %s", customTableId, recordId);
+        String query = String.format("delete from %s where a_id = %s", customTableId, recordId);
         log.info(query);
         jdbcTemplate.execute(query);
     }
 
     @Override
     public Optional<Record> findById(String customTableId, Long recordId) {
-        customTableId = customTableIdChecker.checkId(customTableId);
+        customTableId = IdChecker.checkId(customTableId);
 
         Optional<Record> optionalRecord = Optional.empty();
 
@@ -79,7 +78,7 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return optionalRecord;
 
-        String query = String.format("select * from %s where id = %s", customTableId, recordId);
+        String query = String.format("select * from %s where a_id = %s", customTableId, recordId);
         log.info(query);
         List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())
@@ -94,7 +93,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public List<Record> findAll(String customTableId) {
-        customTableId = customTableIdChecker.checkId(customTableId);
+        customTableId = IdChecker.checkId(customTableId);
 
         List<Record> recordList = new ArrayList<>();
 
@@ -102,7 +101,7 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return recordList;
 
-        String query = String.format("select * from %s order by id", customTableId);
+        String query = String.format("select * from %s order by a_id", customTableId);
         log.info(query);
         List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())
@@ -118,10 +117,10 @@ public class RecordServiceImpl implements RecordService {
         Record record = new Record();
         record.setCustomTableId(customTableId);
 
-        record.setId((Long) params.get("id"));
-        record.setUpdateTime(((Timestamp) params.get("update_time")).toLocalDateTime());
-        params.remove("id");
-        params.remove("update_time");
+        record.setId((Long) params.get("a_id"));
+        record.setUpdateTime(((Timestamp) params.get("a_update_time")).toLocalDateTime());
+        params.remove("a_id");
+        params.remove("a_update_time");
 
         params.entrySet().forEach(x -> {
             Object valueObj = x.getValue();
