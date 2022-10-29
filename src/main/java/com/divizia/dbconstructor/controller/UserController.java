@@ -10,6 +10,7 @@ import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.SubscriptionService;
 import com.divizia.dbconstructor.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,17 +29,12 @@ import java.util.Optional;
 @SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("users")
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final CustomTableService customTableService;
     private final SubscriptionService subscriptionService;
-
-    public UserController(UserService userService, CustomTableService customTableService, SubscriptionService subscriptionService) {
-        this.userService = userService;
-        this.customTableService = customTableService;
-        this.subscriptionService = subscriptionService;
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("all")

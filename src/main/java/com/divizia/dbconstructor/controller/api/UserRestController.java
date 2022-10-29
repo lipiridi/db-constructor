@@ -3,6 +3,7 @@ package com.divizia.dbconstructor.controller.api;
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,15 +21,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/users")
 @PreAuthorize("hasAuthority('ADMIN')")
+@AllArgsConstructor
 public class UserRestController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
-    UserRestController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @GetMapping
     ResponseEntity<Map<String, Object>> all(@PathParam("id") String id) {

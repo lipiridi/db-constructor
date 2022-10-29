@@ -8,6 +8,7 @@ import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import com.divizia.dbconstructor.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,17 +27,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("tables")
 @PreAuthorize("hasAuthority('ADMIN')")
+@AllArgsConstructor
 public class CustomTableController {
 
     private final CustomTableService customTableService;
     private final RequisiteService requisiteService;
     private final UserService userService;
-
-    public CustomTableController(CustomTableService customTableService, RequisiteService requisiteService, UserService userService) {
-        this.customTableService = customTableService;
-        this.requisiteService = requisiteService;
-        this.userService = userService;
-    }
 
     @GetMapping("create")
     public String getCreate(Model model) {

@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,15 +16,11 @@ import java.util.Optional;
 @SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("tables")
+@AllArgsConstructor
 public class CustomTableControllerFree {
 
     private final CustomTableService customTableService;
     private final UserService userService;
-
-    public CustomTableControllerFree(CustomTableService customTableService, UserService userService) {
-        this.customTableService = customTableService;
-        this.userService = userService;
-    }
 
     @GetMapping("all")
     public String getAll(Model model) {

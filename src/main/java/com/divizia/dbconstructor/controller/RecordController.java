@@ -10,6 +10,7 @@ import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RecordService;
 import com.divizia.dbconstructor.model.service.RequisiteService;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +25,13 @@ import java.util.Map;
 @SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("records")
+@AllArgsConstructor
 public class RecordController {
 
     private final CustomTableService customTableService;
     private final RequisiteService requisiteService;
     private final RecordService recordService;
     private final RecordControllerDeserializer recordControllerDeserializer;
-
-    public RecordController(CustomTableService customTableService, RequisiteService requisiteService,
-                            RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
-        this.customTableService = customTableService;
-        this.requisiteService = requisiteService;
-        this.recordService = recordService;
-        this.recordControllerDeserializer = recordControllerDeserializer;
-    }
 
     @GetMapping("{customTableId}/all")
     public String getAll(@PathVariable String customTableId, Model model) {
