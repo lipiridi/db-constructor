@@ -38,20 +38,21 @@ class UserServiceImplTest {
                         "testUser10",
                         passwordEncoder.encode("1111"),
                         Role.ADMIN,
-                        new HashSet<>());
+                        null,
+                        null);
         user = userService.saveAndFlush(user);
         userList.add(user);
 
         assertEquals("testUser10", user.getId());
         assertNotEquals("1111", user.getPassword());
 
-        user.updateAllowed(new User("testUser10", "2222", Role.USER, null));
+        user.updateAllowed(new User("testUser10", "2222", Role.USER, null, null));
         userService.saveAndFlush(user);
 
         assertEquals("testUser10", user.getId());
         assertEquals(Role.USER, user.getRole());
 
-        user.updateAllowed(new User(null, "2222", Role.ADMIN, null));
+        user.updateAllowed(new User(null, "2222", Role.ADMIN, null, null));
 
         assertNotEquals(Role.ADMIN, user.getRole());
 
@@ -66,6 +67,7 @@ class UserServiceImplTest {
                 "testUser20",
                 passwordEncoder.encode("1111"),
                 Role.ADMIN,
+                null,
                 null);
 
         user = userService.saveAndFlush(user);
@@ -80,6 +82,7 @@ class UserServiceImplTest {
                 "testUser30",
                 passwordEncoder.encode("1111"),
                 Role.ADMIN,
+                null,
                 null);
         user = userService.saveAndFlush(user);
         userList.add(user);
@@ -93,6 +96,7 @@ class UserServiceImplTest {
                 "testUser40",
                 passwordEncoder.encode("1111"),
                 Role.ADMIN,
+                null,
                 null);
         user = userService.saveAndFlush(user);
         userList.add(user);

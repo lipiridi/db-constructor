@@ -31,6 +31,9 @@ public class User implements Updatable<User> {
     @ToString.Exclude
     private String password;
 
+    @Pattern(regexp = "^$|^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email is wrong")
+    private String email;
+
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Role can't be null")
     private Role role;
@@ -39,6 +42,11 @@ public class User implements Updatable<User> {
     @ToString.Exclude
     @JsonIgnore
     private Set<CustomTable> customTables;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Subscription> subscriptions;
 
     @Override
     public boolean equals(Object o) {
@@ -62,6 +70,8 @@ public class User implements Updatable<User> {
             password = new BCryptPasswordEncoder(12).encode(other.password);
         if (other.role != null)
             role = other.role;
+        if (other.email != null)
+            email = other.email;
 
         return this;
     }

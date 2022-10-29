@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RequisiteRepository extends JpaRepository<Requisite, RequisiteId> {
 
-    @Query("select e from Requisite e where e.customTable.id = :id order by e.customTable.id, e.id")
+    @Query("from Requisite where customTable.id = :id order by customTable.id, id")
     List<Requisite> findByCustomTableId(@Param("id") String customTableId);
 
 }

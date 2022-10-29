@@ -55,7 +55,7 @@ public class Requisite implements Updatable<Requisite> {
 
     @Override
     public Requisite updateAllowed(Requisite other) {
-        if (!id.equals(other.id))
+        if (!id.equals(other.id) || !customTable.equals(other.customTable))
             return this;
 
         if (other.name != null && !other.name.isBlank())

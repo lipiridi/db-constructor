@@ -14,6 +14,12 @@
     <p><a class="btn btn-primary" href="/users/all" role="button">Return</a></p>
 </div>
 
+<div class="text-center">
+    <form method="post" th:action="@{'/users/delete/{id}' (id=${user.id})}">
+        <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
+</div>
+
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
     <form method="post">
 
@@ -27,6 +33,60 @@
 </div>
 
 <div th:insert="~{fragments :: errorFragment}"></div>
+
+<div class="text-center">
+    <h3>Add new subscription:</h3>
+</div>
+
+<div class="d-flex justify-content-center">
+    <form class="row g-3" method="post" action="/users/subscription/add">
+
+        <label class="visually-hidden" for="user" hidden>User</label>
+        <input hidden id="user" name="user" th:value="${subscription.user.id}">
+
+        <div class="col-auto">
+            <label class="visually-hidden" for="customTable">Type</label>
+            <select class="form-select" id="customTable" name="customTable">
+                <option th:each="customTable: ${customTables}"
+                        th:selected="${customTable.id.equals(subscription.customTable.id)}"
+                        th:text="${customTable.name}"
+                        th:value="${customTable.id}">
+            </select>
+        </div>
+
+        <div class="col-auto">
+            <button class="btn btn-primary mb-3" type="submit" title="You will receive info about new records in table">Subscribe</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="text-center">
+    <h3>Subscriptions:</h3>
+</div>
+
+<div class="d-flex justify-content-center">
+    <table class="table table-striped" id="subscriptionsTable" style="width: 20rem">
+        <thead>
+        <tr>
+            <th scope="col">Table</th>
+            <th scope="col">Unsubscribe</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="subscription : ${subscriptions}">
+            <td th:text="${subscription.customTable.name}"></td>
+            <td>
+                <form method="post"
+                      th:action="@{'/users/subscription/delete/{userId}/{customTableId}'
+                      (userId=${user.id}, customTableId=${subscription.customTable.id})}">
+                    <button class="btn btn-danger" type="submit">Unsubscribe</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 <script crossorigin="anonymous"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"

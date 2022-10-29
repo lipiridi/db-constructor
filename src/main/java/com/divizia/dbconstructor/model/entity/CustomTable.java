@@ -37,6 +37,11 @@ public class CustomTable implements Serializable, Updatable<CustomTable> {
     @JsonIgnore
     private Set<Requisite> requisites;
 
+    @OneToMany(mappedBy = "customTable", orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<Subscription> subscriptions;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

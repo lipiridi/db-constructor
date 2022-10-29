@@ -41,8 +41,7 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <form class="row g-3" method="post"
-          th:action="@{'/tables/{customTableId}/requisite/add'(customTableId=${customTable.id})}">
+    <form class="row g-3" method="post" action="/tables/requisite/add">
 
         <label hidden class="visually-hidden" for="customTable">Id</label>
         <input hidden id="customTable" name="customTable" th:value="${customTable.id}">
@@ -119,7 +118,7 @@
             <td th:text="${requisite.type}"></td>
             <td>
                 <form method="post"
-                      th:action="@{'/tables/{customTableId}/requisite/delete/{id}'(id=${requisite.id}, customTableId=${customTable.id})}">
+                      th:action="@{'/tables/requisite/delete/{customTableId}/{id}'(id=${requisite.id}, customTableId=${customTable.id})}">
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
             </td>
