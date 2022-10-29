@@ -1,11 +1,13 @@
 package com.divizia.dbconstructor.model.entity;
 
 import com.divizia.dbconstructor.model.Updatable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,6 +29,11 @@ public class Subscription implements Updatable<Subscription> {
     @ManyToOne
     @JoinColumn(name = "custom_table_id")
     private CustomTable customTable;
+
+    @OneToMany(mappedBy = "subscription", orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<SubscriptionTask> subscriptionTasks;
 
     @Override
     public boolean equals(Object o) {

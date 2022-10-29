@@ -6,6 +6,7 @@ import com.divizia.dbconstructor.model.service.SubscriptionService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscriptionRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public void deleteByUserAndCustomTableId(String userId, String customTableId) {
         subscriptionRepository.deleteByUserAndCustomTableId(userId, customTableId);
