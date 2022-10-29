@@ -11,7 +11,7 @@
 
 <div class="text-center">
     <h1>Edit user</h1>
-    <p><a class="btn btn-primary" href="/users/all" role="button">Return</a></p>
+    <p><a class="btn btn-primary" href="/" role="button">Go home</a></p>
 </div>
 
 <div class="text-center">
@@ -78,8 +78,8 @@
             <td th:text="${subscription.customTable.name}"></td>
             <td>
                 <form method="post"
-                      th:action="@{'/users/subscription/delete/{userId}/{customTableId}'
-                      (userId=${user.id}, customTableId=${subscription.customTable.id})}">
+                      th:action="@{'/users/subscription/delete/{id}/{customTableId}'
+                      (id=${user.id}, customTableId=${subscription.customTable.id})}">
                     <button class="btn btn-danger" type="submit">Unsubscribe</button>
                 </form>
             </td>

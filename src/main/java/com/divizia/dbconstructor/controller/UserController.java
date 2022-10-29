@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
+import com.divizia.dbconstructor.exceptions.UserPermissionException;
 import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.compositekeys.SubscriptionId;
 import com.divizia.dbconstructor.model.entity.CustomTable;
@@ -12,6 +13,8 @@ import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.SubscriptionService;
 import com.divizia.dbconstructor.model.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,14 +43,24 @@ public class UserController {
         this.subscriptionService = subscriptionService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("all")
     public String getAll(Model model) {
         model.addAttribute("users", userService.findAll());
         return "users/all";
     }
 
+    private void checkPermission(String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!authentication.getAuthorities().contains(Role.ADMIN) && !id.equals(authentication.getName()))
+            throw new UserPermissionException();
+    }
+
     @GetMapping("edit/{id}")
     public String getEdit(@PathVariable String id, Model model) {
+        checkPermission(id);
+
         User user = userService.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 
         return getEditWithValues(model, user);
@@ -72,6 +85,8 @@ public class UserController {
 
     @PostMapping("edit/{id}")
     public String postEdit(@PathVariable String id, @Valid User user, BindingResult result, Model model) {
+        checkPermission(id);
+
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, user);
 
@@ -81,11 +96,13 @@ public class UserController {
 
         userService.saveAndFlush(user);
 
-        return "redirect:/users/all";
+        return "redirect:/users/edit/" + id;
     }
 
     @PostMapping("delete/{id}")
     public String postDelete(@PathVariable String id) {
+        checkPermission(id);
+
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
         userService.deleteById(id);
@@ -98,6 +115,8 @@ public class UserController {
 
     @PostMapping("subscription/add")
     public String postAdd(@Valid Subscription subscription, BindingResult result, Model model) {
+        checkPermission(subscription.getUser().getId());
+
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, subscription.getUser(), subscription);
 
@@ -106,10 +125,12 @@ public class UserController {
         return "redirect:/users/edit/" + subscription.getUser().getId();
     }
 
-    @PostMapping("subscription/delete/{userId}/{customTableId}")
-    public String postDelete(@PathVariable String userId, @PathVariable String customTableId) {
-        subscriptionService.deleteById(new SubscriptionId(userId, customTableId));
-        return "redirect:/users/edit/" + userId;
+    @PostMapping("subscription/delete/{id}/{customTableId}")
+    public String postDelete(@PathVariable String id, @PathVariable String customTableId) {
+        checkPermission(id);
+
+        subscriptionService.deleteById(new SubscriptionId(id, customTableId));
+        return "redirect:/users/edit/" + id;
     }
 
 }

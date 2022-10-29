@@ -22,7 +22,8 @@ public class SecurityConfig {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/register").anonymous()
-                .antMatchers("/users/**").hasAuthority(Role.ADMIN.name())
+                //We disabled it, because we allow to change myself
+                //.antMatchers("/users/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
