@@ -6,6 +6,7 @@ import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.repo.CustomTableRepository;
 import com.divizia.dbconstructor.model.service.RecordService;
+import com.divizia.dbconstructor.model.service.SubscriptionTaskService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class RecordServiceImpl implements RecordService {
 
     private final CustomTableRepository customTableRepository;
+    private final SubscriptionTaskService subscriptionTaskService;
     private final JdbcTemplate jdbcTemplate;
 
     @Override
@@ -55,8 +57,12 @@ public class RecordServiceImpl implements RecordService {
 
         Long savedId = (Long) result.get("a_id");
 
-        return findById(record.getCustomTableId(), savedId).orElseThrow(
+        Record savedRecord = findById(record.getCustomTableId(), savedId).orElseThrow(
                 () -> new RecordNotFoundException(record.getCustomTableId(), savedId));
+
+        subscriptionTaskService.subscribe(savedRecord.getCustomTableId(), savedRecord.getId());
+
+        return savedRecord;
     }
 
     @Override
@@ -66,6 +72,8 @@ public class RecordServiceImpl implements RecordService {
         String query = String.format("delete from %s where a_id = %s", customTableId, recordId);
         log.info(query);
         jdbcTemplate.execute(query);
+
+        subscriptionTaskService.unsubscribe(customTableId, recordId);
     }
 
     @Override

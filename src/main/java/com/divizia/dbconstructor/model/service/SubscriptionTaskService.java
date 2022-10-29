@@ -1,8 +1,6 @@
 package com.divizia.dbconstructor.model.service;
 
-import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.compositekeys.SubscriptionTaskId;
-import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.entity.SubscriptionTask;
 
 import java.util.List;
@@ -17,5 +15,9 @@ public interface SubscriptionTaskService {
     Optional<SubscriptionTask> findById(SubscriptionTaskId subscriptionTaskId);
 
     List<SubscriptionTask> findAll();
+
+    void subscribe(String customTableId, Long recordId);
+
+    void unsubscribe(String customTableId, Long recordId);
 
 }
