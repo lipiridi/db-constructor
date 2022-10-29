@@ -69,12 +69,14 @@
     <table class="table table-striped" id="subscriptionsTable" style="width: 20rem">
         <thead>
         <tr>
+            <th scope="col">Id</th>
             <th scope="col">Table</th>
             <th scope="col">Unsubscribe</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="subscription : ${subscriptions}">
+            <th scope="row" th:text="${subscription.id}"></th>
             <td th:text="${subscription.customTable.name}"></td>
             <td>
                 <form method="post"

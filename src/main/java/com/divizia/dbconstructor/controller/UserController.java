@@ -2,10 +2,7 @@ package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
 import com.divizia.dbconstructor.exceptions.UserPermissionException;
-import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
-import com.divizia.dbconstructor.model.compositekeys.SubscriptionId;
 import com.divizia.dbconstructor.model.entity.CustomTable;
-import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.entity.Subscription;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
@@ -119,6 +116,13 @@ public class UserController {
 
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, subscription.getUser(), subscription);
+        if (subscriptionService.findByUserAndCustomTableId(
+                        subscription.getUser().getId(),
+                        subscription.getCustomTable().getId())
+                .isPresent()) {
+            model.addAttribute("errorList", List.of("This subscription already exists!"));
+            return getEditWithValues(model, subscription.getUser(), subscription);
+        }
 
         subscriptionService.saveAndFlush(subscription);
 
@@ -129,7 +133,7 @@ public class UserController {
     public String postDelete(@PathVariable String id, @PathVariable String customTableId) {
         checkPermission(id);
 
-        subscriptionService.deleteById(new SubscriptionId(id, customTableId));
+        subscriptionService.deleteByUserAndCustomTableId(id, customTableId);
         return "redirect:/users/edit/" + id;
     }
 

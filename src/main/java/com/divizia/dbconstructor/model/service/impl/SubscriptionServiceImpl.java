@@ -1,8 +1,6 @@
 package com.divizia.dbconstructor.model.service.impl;
 
-import com.divizia.dbconstructor.model.compositekeys.SubscriptionId;
 import com.divizia.dbconstructor.model.entity.Subscription;
-import com.divizia.dbconstructor.model.repo.RequisiteRepository;
 import com.divizia.dbconstructor.model.repo.SubscriptionRepository;
 import com.divizia.dbconstructor.model.service.SubscriptionService;
 import lombok.AllArgsConstructor;
@@ -24,13 +22,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public void deleteById(SubscriptionId subscriptionId) {
-        subscriptionRepository.deleteById(subscriptionId);
+    public void deleteById(Long id) {
+        subscriptionRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Subscription> findById(SubscriptionId subscriptionId) {
-        return subscriptionRepository.findById(subscriptionId);
+    public void deleteByUserAndCustomTableId(String userId, String customTableId) {
+        subscriptionRepository.deleteByUserAndCustomTableId(userId, customTableId);
+    }
+
+    @Override
+    public Optional<Subscription> findById(Long id) {
+        return subscriptionRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Subscription> findByUserAndCustomTableId(String userId, String customTableId) {
+        return subscriptionRepository.findByUserAndCustomTableId(userId, customTableId);
     }
 
     @Override
