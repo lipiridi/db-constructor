@@ -12,6 +12,8 @@ public interface SubscriptionTaskService {
 
     void deleteById(SubscriptionTaskId subscriptionTaskId);
 
+    void deleteAll(Iterable<? extends SubscriptionTask> subscriptionTasks);
+
     Optional<SubscriptionTask> findById(SubscriptionTaskId subscriptionTaskId);
 
     List<SubscriptionTask> findAll();

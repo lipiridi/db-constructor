@@ -13,6 +13,8 @@ public interface CustomTableService {
 
     Optional<CustomTable> findById(String id);
 
+    Optional<CustomTable> findByIdWithRequisites(String id);
+
     List<CustomTable> findAll();
 
 }

@@ -32,27 +32,32 @@ class UserServiceImplTest {
         userList.forEach(x -> userService.deleteById(x.getId()));
     }
 
+    private User getUser(String id, String password, Role role) {
+        return new User(
+                id,
+                passwordEncoder.encode(password),
+                null,
+                role,
+                new HashSet<>(),
+                new HashSet<>());
+    }
+
     @Test
     void saveAndFlush() {
-        User user = new User(
-                        "testUser10",
-                        passwordEncoder.encode("1111"),
-                        Role.ADMIN,
-                        null,
-                        null);
+        User user = getUser("testUser10", "1111", Role.ADMIN);
         user = userService.saveAndFlush(user);
         userList.add(user);
 
         assertEquals("testUser10", user.getId());
         assertNotEquals("1111", user.getPassword());
 
-        user.updateAllowed(new User("testUser10", "2222", Role.USER, null, null));
+        user.updateAllowed(getUser("testUser10", "2222", Role.USER));
         userService.saveAndFlush(user);
 
         assertEquals("testUser10", user.getId());
         assertEquals(Role.USER, user.getRole());
 
-        user.updateAllowed(new User(null, "2222", Role.ADMIN, null, null));
+        user.updateAllowed(getUser(null, "2222", Role.ADMIN));
 
         assertNotEquals(Role.ADMIN, user.getRole());
 
@@ -63,13 +68,7 @@ class UserServiceImplTest {
 
     @Test
     void deleteById() {
-        User user = new User(
-                "testUser20",
-                passwordEncoder.encode("1111"),
-                Role.ADMIN,
-                null,
-                null);
-
+        User user = getUser("testUser20", "1111", Role.ADMIN);
         user = userService.saveAndFlush(user);
         userService.deleteById(user.getId());
 
@@ -78,12 +77,7 @@ class UserServiceImplTest {
 
     @Test
     void findById() {
-        User user = new User(
-                "testUser30",
-                passwordEncoder.encode("1111"),
-                Role.ADMIN,
-                null,
-                null);
+        User user = getUser("testUser30", "1111", Role.ADMIN);
         user = userService.saveAndFlush(user);
         userList.add(user);
 
@@ -92,12 +86,7 @@ class UserServiceImplTest {
 
     @Test
     void findAll() {
-        User user = new User(
-                "testUser40",
-                passwordEncoder.encode("1111"),
-                Role.ADMIN,
-                null,
-                null);
+        User user = getUser("testUser40", "1111", Role.ADMIN);
         user = userService.saveAndFlush(user);
         userList.add(user);
 

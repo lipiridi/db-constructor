@@ -13,10 +13,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -78,29 +76,29 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Optional<Record> findById(String customTableId, Long recordId) {
-        customTableId = IdChecker.checkId(customTableId);
+        List<Record> records = findAllById(customTableId, List.of(recordId));
 
         Optional<Record> optionalRecord = Optional.empty();
-
-        Optional<CustomTable> customTable = customTableRepository.findById(customTableId);
-        if (customTable.isEmpty())
-            return optionalRecord;
-
-        String query = String.format("select * from %s where a_id = %s", customTableId, recordId);
-        log.info(query);
-        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
-        if (queryForList.isEmpty())
-            return optionalRecord;
-
-        Map<String, Object> params = queryForList.get(0);
-
-        optionalRecord = Optional.of(createRecordFromEntry(customTable.get().getId(), params));
+        if (!records.isEmpty())
+            optionalRecord = Optional.of(records.get(0));
 
         return optionalRecord;
     }
 
     @Override
+    public List<Record> findAllById(String customTableId, Collection<Long> ids) {
+        String condition = String.format("where a_id in (%s)",
+                ids.stream().map(String::valueOf).collect(Collectors.joining(",")));
+
+        return findAllWithCondition(customTableId, condition);
+    }
+
+    @Override
     public List<Record> findAll(String customTableId) {
+        return findAllWithCondition(customTableId, "");
+    }
+
+    private List<Record> findAllWithCondition(String customTableId, String condition) {
         customTableId = IdChecker.checkId(customTableId);
 
         List<Record> recordList = new ArrayList<>();
@@ -109,7 +107,7 @@ public class RecordServiceImpl implements RecordService {
         if (customTable.isEmpty())
             return recordList;
 
-        String query = String.format("select * from %s order by a_id", customTableId);
+        String query = String.format("select * from %s %s order by a_id", customTableId, condition);
         log.info(query);
         List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(query);
         if (queryForList.isEmpty())

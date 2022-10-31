@@ -53,6 +53,13 @@ public class CustomTableServiceImpl implements CustomTableService {
     }
 
     @Override
+    public Optional<CustomTable> findByIdWithRequisites(String id) {
+        id = IdChecker.checkId(id);
+
+        return customTableRepository.findByIdWithRequisites(id);
+    }
+
+    @Override
     public List<CustomTable> findAll() {
         return customTableRepository.findAll(Sort.by("id"));
     }

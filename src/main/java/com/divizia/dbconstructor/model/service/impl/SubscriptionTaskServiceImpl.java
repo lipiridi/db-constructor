@@ -31,6 +31,11 @@ public class SubscriptionTaskServiceImpl implements SubscriptionTaskService {
     }
 
     @Override
+    public void deleteAll(Iterable<? extends SubscriptionTask> subscriptionTasks) {
+        subscriptionTaskRepository.deleteAll(subscriptionTasks);
+    }
+
+    @Override
     public Optional<SubscriptionTask> findById(SubscriptionTaskId subscriptionTaskId) {
         return subscriptionTaskRepository.findById(subscriptionTaskId);
     }
