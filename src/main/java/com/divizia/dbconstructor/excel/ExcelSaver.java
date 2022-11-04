@@ -1,13 +1,16 @@
 package com.divizia.dbconstructor.excel;
 
+import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,24 +23,27 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class ExcelSaver {
 
-    private static final int MAX_ROWS = 100;
+    @Value("${excel.download.max-cells-per-list}")
+    private int MAX_CELLS;
 
-    public static Resource exportRecords(String fileName, Collection<Requisite> requisites, Collection<Record> records) {
+    public Resource exportRecords(String fileName, Map<CustomTable, ? extends Collection<Record>> records) {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet(fileName);
+        records.forEach((x, y) -> {
+            XSSFSheet sheet = workbook.createSheet(x.getId());
 
-        Map<String, Integer> requisitePositions = writeHeader(requisites, sheet);
+            Map<String, Integer> requisitePositions = writeHeader(x.getRequisites(), sheet);
 
-        writeRecords(records, sheet, requisitePositions);
+            writeRecords(y, sheet, requisitePositions);
+        });
 
         return getResource(fileName, workbook);
     }
 
-    private static Resource getResource(String fileName, XSSFWorkbook workbook) {
+    private Resource getResource(String fileName, XSSFWorkbook workbook) {
         Resource resource;
-
         try {
             Path tempFile = Files.createTempFile(fileName + "_", ".xlsx");
             OutputStream outputStream = Files.newOutputStream(tempFile);
@@ -51,13 +57,14 @@ public class ExcelSaver {
         return resource;
     }
 
-    private static void writeRecords(Collection<Record> records, XSSFSheet sheet, Map<String, Integer> requisitePositions) {
+    private void writeRecords(Collection<Record> records, XSSFSheet sheet, Map<String, Integer> requisitePositions) {
         AtomicInteger rowCount = new AtomicInteger(1);
 
         //I use iterator, because I want to limit file size
         int rows = 0;
+        int maxRows = MAX_CELLS / (requisitePositions.size() + 2);
         Iterator<Record> iterator = records.iterator();
-        while (iterator.hasNext() && rows < MAX_ROWS) {
+        while (iterator.hasNext() && rows < maxRows) {
             Record record = iterator.next();
             Row recordRow = sheet.createRow(rowCount.getAndIncrement());
 
@@ -77,7 +84,9 @@ public class ExcelSaver {
         }
     }
 
-    private static void writeCellByType(Object value, Cell recordCell) {
+    private void writeCellByType(Object value, Cell recordCell) {
+        if (value == null) return;
+
         if (value instanceof Integer || value instanceof Long || value instanceof Double)
             recordCell.setCellValue(Double.parseDouble(value.toString()));
         else if (value instanceof Boolean)
@@ -88,7 +97,7 @@ public class ExcelSaver {
             recordCell.setCellValue(String.valueOf(value));
     }
 
-    private static Map<String, Integer> writeHeader(Collection<Requisite> requisites, XSSFSheet sheet) {
+    private Map<String, Integer> writeHeader(Collection<Requisite> requisites, XSSFSheet sheet) {
         HashMap<String, Integer> requisitePositions = new HashMap<>();
 
         Row row = sheet.createRow(0);

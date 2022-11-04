@@ -2,14 +2,14 @@ package com.divizia.dbconstructor.controller;
 
 import com.divizia.dbconstructor.excel.ExcelSaver;
 import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
+import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
-import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.serializers.Formatter;
 import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.RecordService;
-import com.divizia.dbconstructor.model.service.RequisiteService;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +24,13 @@ import java.util.Map;
 @SuppressWarnings("SameReturnValue")
 @Controller
 @RequestMapping("records")
+@AllArgsConstructor
 public class RecordController {
 
     private final CustomTableService customTableService;
-    private final RequisiteService requisiteService;
     private final RecordService recordService;
     private final RecordControllerDeserializer recordControllerDeserializer;
-
-    public RecordController(CustomTableService customTableService, RequisiteService requisiteService,
-                            RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
-        this.customTableService = customTableService;
-        this.requisiteService = requisiteService;
-        this.recordService = recordService;
-        this.recordControllerDeserializer = recordControllerDeserializer;
-    }
+    private final ExcelSaver excelSaver;
 
     @GetMapping("{customTableId}/all")
     public String getAll(@PathVariable String customTableId, Model model) {
@@ -82,16 +75,17 @@ public class RecordController {
     }
 
     private void addStandardData(String customTableId, Model model) {
-        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        CustomTable customTable = customTableService.findByIdWithRequisites(customTableId).orElseThrow();
+
         Map<String, List<Record>> requisitesRecordsMap = new HashMap<>();
-        requisites.forEach(x -> {
+        customTable.getRequisites().forEach(x -> {
             if (x.getType() == RequisiteType.FOREIGN)
                 requisitesRecordsMap.put(x.getId(), recordService.findAll(x.getForeignTableId()));
         });
 
-        model.addAttribute("requisites", requisites);
+        model.addAttribute("requisites", customTable.getRequisites());
         model.addAttribute("requisitesRecordsMap", requisitesRecordsMap);
-        model.addAttribute("customTable", customTableService.findById(customTableId).orElseThrow());
+        model.addAttribute("customTable", customTable);
         model.addAttribute("formatNormal", Formatter.formatNormal);
         model.addAttribute("formatISO", Formatter.formatISO);
     }
@@ -105,9 +99,9 @@ public class RecordController {
     @GetMapping("{customTableId}/export")
     @ResponseBody
     public ResponseEntity<Resource> exportFile(@PathVariable String customTableId) {
-        List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);
+        CustomTable customTable = customTableService.findByIdWithRequisites(customTableId).orElseThrow();
         List<Record> records = recordService.findAll(customTableId);
-        Resource resource = ExcelSaver.exportRecords(customTableId, requisites, records);
+        Resource resource = excelSaver.exportRecords(customTableId, Map.of(customTable, records));
 
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);

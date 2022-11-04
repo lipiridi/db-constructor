@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.service.RequisiteService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,13 +16,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@AllArgsConstructor
 public class RecordControllerDeserializer {
 
     private final RequisiteService requisiteService;
-
-    public RecordControllerDeserializer(RequisiteService requisiteService) {
-        this.requisiteService = requisiteService;
-    }
 
     public Record deserialize(String customTableId, Map<String, String> params) {
         List<Requisite> requisites = requisiteService.findByCustomTableId(customTableId);

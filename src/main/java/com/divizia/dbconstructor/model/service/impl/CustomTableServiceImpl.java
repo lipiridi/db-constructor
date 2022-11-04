@@ -3,6 +3,7 @@ package com.divizia.dbconstructor.model.service.impl;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.repo.CustomTableRepository;
 import com.divizia.dbconstructor.model.service.CustomTableService;
+import com.divizia.dbconstructor.model.service.IdChecker;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -53,8 +54,25 @@ public class CustomTableServiceImpl implements CustomTableService {
     }
 
     @Override
+    public Optional<CustomTable> findByIdWithRequisites(String id) {
+        id = IdChecker.checkId(id);
+
+        return customTableRepository.findByIdWithRequisites(id);
+    }
+
+    @Override
     public List<CustomTable> findAll() {
         return customTableRepository.findAll(Sort.by("id"));
+    }
+
+    @Override
+    public List<CustomTable> findAllWithRequisites() {
+        return customTableRepository.findAllWithRequisites();
+    }
+
+    @Override
+    public List<CustomTable> findByAuthorId(String userId) {
+        return customTableRepository.findByAuthorId(userId);
     }
 
 }

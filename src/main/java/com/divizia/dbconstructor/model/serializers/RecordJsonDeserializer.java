@@ -1,7 +1,7 @@
 package com.divizia.dbconstructor.model.serializers;
 
 import com.divizia.dbconstructor.model.entity.Record;
-import com.divizia.dbconstructor.model.service.impl.IdChecker;
+import com.divizia.dbconstructor.model.service.IdChecker;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -33,7 +33,7 @@ public class RecordJsonDeserializer extends StdDeserializer<Record> {
         mainNode.fields().forEachRemaining(x -> {
             String key = IdChecker.checkId(x.getKey());
 
-            if (key.equals("a_id"))
+            if (key.equals("id"))
                 record.setId(x.getValue().asLong());
             else {
                 addToMap(requisiteValueMap, x.getValue(), key);

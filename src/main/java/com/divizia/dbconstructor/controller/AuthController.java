@@ -3,6 +3,7 @@ package com.divizia.dbconstructor.controller;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,15 +18,11 @@ import java.util.Optional;
 
 @SuppressWarnings("SameReturnValue")
 @Controller
+@AllArgsConstructor
 public class AuthController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @GetMapping(value = "/")
     public String authorize(Model model) {

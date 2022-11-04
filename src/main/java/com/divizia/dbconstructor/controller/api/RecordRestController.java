@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.exceptions.RecordNotFoundException;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.serializers.RecordControllerDeserializer;
 import com.divizia.dbconstructor.model.service.RecordService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,15 +19,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/records")
+@AllArgsConstructor
 public class RecordRestController {
 
     private final RecordService recordService;
     private final RecordControllerDeserializer recordControllerDeserializer;
-
-    RecordRestController(RecordService recordService, RecordControllerDeserializer recordControllerDeserializer) {
-        this.recordService = recordService;
-        this.recordControllerDeserializer = recordControllerDeserializer;
-    }
 
     @GetMapping
     ResponseEntity<Map<String, Object>> all(@PathParam("customTableId") String customTableId, @PathParam("id") Long id) {

@@ -1,6 +1,5 @@
 package com.divizia.dbconstructor.config;
 
-import com.divizia.dbconstructor.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,7 +21,8 @@ public class SecurityConfig {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/register").anonymous()
-                .antMatchers("/users/**").hasAuthority(Role.ADMIN.name())
+                //We disabled it, because we allow to change myself
+                //.antMatchers("/users/**").hasAuthority(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

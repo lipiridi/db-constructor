@@ -34,9 +34,9 @@ class RecordServiceImplTest {
     @BeforeAll
     void setUp() {
         CustomTable customTable = customTableService.saveAndFlush(
-                new CustomTable("test_table", "Test table", null, null));
+                new CustomTable("test_table", "Test table", null, null, null));
         CustomTable customTable2 = customTableService.saveAndFlush(
-                new CustomTable("test_foreign_table", "Test foreign table", null, null));
+                new CustomTable("test_foreign_table", "Test foreign table", null, null, null));
 
         requisiteService.saveAndFlush(
                 new Requisite("name", customTable, "Name", RequisiteType.STRING,  null));

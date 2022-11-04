@@ -9,8 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -35,7 +35,12 @@ public class CustomTable implements Serializable, Updatable<CustomTable> {
     @OneToMany(mappedBy = "customTable", orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private Set<Requisite> requisites;
+    private List<Requisite> requisites;
+
+    @OneToMany(mappedBy = "customTable", orphanRemoval = true)
+    @ToString.Exclude
+    @JsonIgnore
+    private List<Subscription> subscriptions;
 
     @Override
     public boolean equals(Object o) {

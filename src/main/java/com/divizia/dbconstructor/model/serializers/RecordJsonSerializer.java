@@ -24,8 +24,8 @@ public class RecordJsonSerializer extends StdSerializer<Record> {
             throws IOException {
 
         jgen.writeStartObject();
-        jgen.writeNumberField("a_id", value.getId());
-        jgen.writeObjectField("a_updateTime", value.getUpdateTime().format(Formatter.formatNormal));
+        jgen.writeNumberField("id", value.getId());
+        jgen.writeObjectField("updateTime", value.getUpdateTime().format(Formatter.formatNormal));
 
         for (Map.Entry<String, Object> entry : value.getRequisiteValueMap().entrySet()) {
             Object valueObject = entry.getValue();
