@@ -5,7 +5,6 @@ import com.divizia.dbconstructor.exceptions.UserPermissionException;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Subscription;
 import com.divizia.dbconstructor.model.entity.User;
-import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.SubscriptionService;
@@ -112,7 +111,7 @@ public class UserController {
 
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, subscription.getUser(), subscription);
-        if (subscriptionService.findByUserAndCustomTableId(
+        if (subscriptionService.findByUserIdAndCustomTableId(
                         subscription.getUser().getId(),
                         subscription.getCustomTable().getId())
                 .isPresent()) {
@@ -129,7 +128,7 @@ public class UserController {
     public String postDelete(@PathVariable String id, @PathVariable String customTableId) {
         checkPermission(id);
 
-        subscriptionService.deleteByUserAndCustomTableId(id, customTableId);
+        subscriptionService.deleteByUserIdAndCustomTableId(id, customTableId);
         return "redirect:/users/edit/" + id;
     }
 

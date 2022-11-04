@@ -29,8 +29,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Transactional
     @Override
-    public void deleteByUserAndCustomTableId(String userId, String customTableId) {
-        subscriptionRepository.deleteByUserAndCustomTableId(userId, customTableId);
+    public void deleteByUserIdAndCustomTableId(String userId, String customTableId) {
+        subscriptionRepository.deleteByUserIdAndCustomTableId(userId, customTableId);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public Optional<Subscription> findByUserAndCustomTableId(String userId, String customTableId) {
-        return subscriptionRepository.findByUserAndCustomTableId(userId, customTableId);
+    public Optional<Subscription> findByUserIdAndCustomTableId(String userId, String customTableId) {
+        return subscriptionRepository.findByUserIdAndCustomTableId(userId, customTableId);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<Subscription> findAll() {
-        return subscriptionRepository.findAll(Sort.by("user, customTable"));
+        return subscriptionRepository.findAll(Sort.by("user").and(Sort.by("customTable")));
     }
 
 }

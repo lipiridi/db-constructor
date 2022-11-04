@@ -23,7 +23,7 @@
 </div>
 
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
-    <form method="post">
+    <form method="post" th:action="@{'/tables/edit/{id}'(id=${customTable.id})}">
 
         <div th:insert="~{tables/create :: createFragment}"></div>
 

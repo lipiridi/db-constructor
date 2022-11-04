@@ -21,7 +21,7 @@
 </div>
 
 <div class="w-100 p-4 d-flex justify-content-center pb-4">
-    <form method="post">
+    <form method="post" th:action="@{'/users/edit/{id}'(id=${user.id})}">
 
         <div th:insert="~{register :: createFragment}"></div>
 

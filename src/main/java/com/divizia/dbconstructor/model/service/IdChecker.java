@@ -1,4 +1,4 @@
-package com.divizia.dbconstructor.model.service.impl;
+package com.divizia.dbconstructor.model.service;
 
 public class IdChecker {
 

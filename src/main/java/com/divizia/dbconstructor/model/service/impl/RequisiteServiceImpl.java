@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.Requisite;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.repo.RequisiteRepository;
+import com.divizia.dbconstructor.model.service.IdChecker;
 import com.divizia.dbconstructor.model.service.RequisiteService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

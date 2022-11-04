@@ -4,6 +4,7 @@ import com.divizia.dbconstructor.excel.ExcelSaver;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.*;
 import com.divizia.dbconstructor.model.service.RecordService;
+import com.divizia.dbconstructor.model.service.RequisiteService;
 import com.divizia.dbconstructor.model.service.SubscriptionTaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class SubscriptionSender {
 
     private final SubscriptionTaskService subscriptionTaskService;
+    private final RequisiteService requisiteService;
     private final RecordService recordService;
     private final EmailService emailService;
     private final ExcelSaver excelSaver;
@@ -31,6 +33,8 @@ public class SubscriptionSender {
     public void notifySubscribers() {
 
         List<SubscriptionTask> subscriptionTaskList = subscriptionTaskService.findAll();
+
+        if (subscriptionTaskList.isEmpty()) return;
 
         Map<User, Map<Subscription, Set<Long>>> notifyList = subscriptionTaskList
                 .stream()
@@ -57,6 +61,8 @@ public class SubscriptionSender {
                         x -> x.getKey().getCustomTable(),
                         x -> recordService.findAllById(x.getKey().getCustomTable().getId(), x.getValue())
                 ));
+
+        data.keySet().forEach(x -> x.setRequisites(requisiteService.findByCustomTableId(x.getId())));
 
         Resource resource = excelSaver.exportRecords("new_records", data);
 

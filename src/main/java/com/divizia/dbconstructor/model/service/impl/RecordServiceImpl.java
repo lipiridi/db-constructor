@@ -5,6 +5,7 @@ import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.enums.RequisiteType;
 import com.divizia.dbconstructor.model.repo.CustomTableRepository;
+import com.divizia.dbconstructor.model.service.IdChecker;
 import com.divizia.dbconstructor.model.service.RecordService;
 import com.divizia.dbconstructor.model.service.SubscriptionTaskService;
 import lombok.AllArgsConstructor;

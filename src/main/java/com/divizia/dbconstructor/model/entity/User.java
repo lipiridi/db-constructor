@@ -11,8 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -41,12 +41,12 @@ public class User implements Updatable<User> {
     @OneToMany(mappedBy = "author", orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private Set<CustomTable> customTables;
+    private List<CustomTable> customTables;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private Set<Subscription> subscriptions;
+    private List<Subscription> subscriptions;
 
     @Override
     public boolean equals(Object o) {

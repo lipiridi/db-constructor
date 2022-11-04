@@ -75,7 +75,7 @@ public class RecordController {
     }
 
     private void addStandardData(String customTableId, Model model) {
-        CustomTable customTable = customTableService.findById(customTableId).orElseThrow();
+        CustomTable customTable = customTableService.findByIdWithRequisites(customTableId).orElseThrow();
 
         Map<String, List<Record>> requisitesRecordsMap = new HashMap<>();
         customTable.getRequisites().forEach(x -> {
@@ -85,7 +85,7 @@ public class RecordController {
 
         model.addAttribute("requisites", customTable.getRequisites());
         model.addAttribute("requisitesRecordsMap", requisitesRecordsMap);
-        model.addAttribute("customTable", customTableService.findById(customTableId).orElseThrow());
+        model.addAttribute("customTable", customTable);
         model.addAttribute("formatNormal", Formatter.formatNormal);
         model.addAttribute("formatISO", Formatter.formatISO);
     }

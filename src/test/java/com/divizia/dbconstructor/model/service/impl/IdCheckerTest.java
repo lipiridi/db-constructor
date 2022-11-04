@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.model.service.impl;
 
+import com.divizia.dbconstructor.model.service.IdChecker;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

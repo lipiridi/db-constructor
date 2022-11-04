@@ -3,8 +3,6 @@ package com.divizia.dbconstructor.excel;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
-import com.divizia.dbconstructor.model.service.RequisiteService;
-import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -26,23 +24,17 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
-@RequiredArgsConstructor
 public class ExcelSaver {
 
     @Value("${excel.download.max-cells-per-list}")
     private int MAX_CELLS;
-    private final RequisiteService requisiteService;
 
     public Resource exportRecords(String fileName, Map<CustomTable, ? extends Collection<Record>> records) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         records.forEach((x, y) -> {
             XSSFSheet sheet = workbook.createSheet(x.getId());
 
-            Map<String, Integer> requisitePositions;
-            if (x.getRequisites() == null)
-                requisitePositions = writeHeader(requisiteService.findByCustomTableId(x.getId()), sheet);
-            else
-                requisitePositions = writeHeader(x.getRequisites(), sheet);
+            Map<String, Integer> requisitePositions = writeHeader(x.getRequisites(), sheet);
 
             writeRecords(y, sheet, requisitePositions);
         });

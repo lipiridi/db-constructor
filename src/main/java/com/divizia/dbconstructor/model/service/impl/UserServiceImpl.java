@@ -1,7 +1,10 @@
 package com.divizia.dbconstructor.model.service.impl;
 
+import com.divizia.dbconstructor.exceptions.ExistingRelationshipException;
+import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.repo.UserRepository;
+import com.divizia.dbconstructor.model.service.CustomTableService;
 import com.divizia.dbconstructor.model.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -15,6 +18,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CustomTableService customTableService;
 
     @Override
     public User saveAndFlush(User user) {
@@ -23,6 +27,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(String id) {
+        List<CustomTable> customTables = customTableService.findByAuthorId(id);
+
+        if (!customTables.isEmpty())
+            throw new ExistingRelationshipException(customTables);
+
         userRepository.deleteById(id);
     }
 

@@ -29,7 +29,7 @@ public class CustomTableControllerFree {
         User user = optionalUser.orElse(new User());
 
         model.addAttribute("isAdmin", user.getRole() == Role.ADMIN);
-        model.addAttribute("tables", customTableService.findAll());
+        model.addAttribute("tables", customTableService.findAllWithRequisites());
         return "tables/all";
     }
 

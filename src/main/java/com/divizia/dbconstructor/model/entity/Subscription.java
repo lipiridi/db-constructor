@@ -6,8 +6,8 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,7 +33,7 @@ public class Subscription implements Updatable<Subscription> {
     @OneToMany(mappedBy = "subscription", orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private Set<SubscriptionTask> subscriptionTasks;
+    private List<SubscriptionTask> subscriptionTasks;
 
     @Override
     public boolean equals(Object o) {

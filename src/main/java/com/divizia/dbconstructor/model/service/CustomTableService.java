@@ -17,4 +17,8 @@ public interface CustomTableService {
 
     List<CustomTable> findAll();
 
+    List<CustomTable> findAllWithRequisites();
+
+    List<CustomTable> findByAuthorId(String userId);
+
 }
