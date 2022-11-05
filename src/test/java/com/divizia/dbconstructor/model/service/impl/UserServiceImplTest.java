@@ -38,8 +38,8 @@ class UserServiceImplTest {
                 passwordEncoder.encode(password),
                 null,
                 role,
-                new HashSet<>(),
-                new HashSet<>());
+                new ArrayList<>(),
+                new ArrayList<>());
     }
 
     @Test

@@ -65,28 +65,28 @@ class RecordServiceImplTest {
         assertNotNull(record.getUpdateTime());
 
         HashMap<String, Object> requisites = new HashMap<>();
-        requisites.put("name", "Harry Potter");
-        requisites.put("price", 5.5);
-        requisites.put("foreign_table", 1);
+        requisites.put("c_name", "Harry Potter");
+        requisites.put("c_price", 5.5);
+        requisites.put("c_foreign_table", 1);
         record.setRequisiteValueMap(requisites);
         recordService.saveAndFlush(record);
 
         record = getFromDB(record.getCustomTableId(), record.getId());
-        assertEquals("Harry Potter", record.getRequisiteValueMap().get("name"));
-        assertEquals(5.5D, record.getRequisiteValueMap().get("price"));
-        assertEquals(1L, record.getRequisiteValueMap().get("foreign_table"));
+        assertEquals("Harry Potter", record.getRequisiteValueMap().get("c_name"));
+        assertEquals(5.5D, record.getRequisiteValueMap().get("c_price"));
+        assertEquals(1L, record.getRequisiteValueMap().get("c_foreign_table"));
 
-        record.getRequisiteValueMap().remove("price");
+        record.getRequisiteValueMap().remove("c_price");
         recordService.saveAndFlush(record);
         record = getFromDB(record.getCustomTableId(), record.getId());
-        assertEquals(5.5D, record.getRequisiteValueMap().get("price"));
+        assertEquals(5.5D, record.getRequisiteValueMap().get("c_price"));
 
-        record.getRequisiteValueMap().put("price", null);
+        record.getRequisiteValueMap().put("c_price", null);
         recordService.saveAndFlush(record);
         record = getFromDB(record.getCustomTableId(), record.getId());
-        assertNull(record.getRequisiteValueMap().get("price"));
+        assertNull(record.getRequisiteValueMap().get("c_price"));
 
-        record.getRequisiteValueMap().put("foreign_table", 9);
+        record.getRequisiteValueMap().put("c_foreign_table", 9);
         Record finalRecord = record;
         assertThrows(DataIntegrityViolationException.class, () -> recordService.saveAndFlush(finalRecord));
     }
