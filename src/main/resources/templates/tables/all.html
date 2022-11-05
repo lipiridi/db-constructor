@@ -9,9 +9,10 @@
 </head>
 <body>
 
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
 <div class="text-center">
     <h1>Manage tables</h1>
-    <p><a class="btn btn-primary" href="/" role="button">Go home</a></p>
     <p th:if="${isAdmin}"><a class="btn btn-primary" href="/tables/create" role="button">Create new</a></p>
 </div>
 

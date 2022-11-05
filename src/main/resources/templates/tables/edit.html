@@ -17,6 +17,8 @@
 </head>
 <body onload="hideForeignDiv()">
 
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
 <div class="text-center">
     <h1>Edit table</h1>
     <p><a class="btn btn-primary" href="/tables/all" role="button">Return</a></p>
@@ -34,7 +36,7 @@
     </form>
 </div>
 
-<div th:insert="~{fragments :: errorFragment}"></div>
+<div th:insert="~{fragments/main :: errorFragment}"></div>
 
 <div class="text-center">
     <h3>Add new requisite:</h3>

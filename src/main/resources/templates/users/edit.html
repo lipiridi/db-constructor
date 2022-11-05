@@ -9,9 +9,10 @@
 </head>
 <body>
 
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
 <div class="text-center">
     <h1>Edit user</h1>
-    <p><a class="btn btn-primary" href="/" role="button">Go home</a></p>
 </div>
 
 <div class="text-center">
@@ -32,7 +33,7 @@
     </form>
 </div>
 
-<div th:insert="~{fragments :: errorFragment}"></div>
+<div th:insert="~{fragments/main :: errorFragment}"></div>
 
 <div class="text-center">
     <h3>Add new subscription:</h3>
