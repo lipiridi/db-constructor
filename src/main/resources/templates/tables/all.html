@@ -44,14 +44,38 @@
                     <button type="submit" class="btn btn-secondary">Edit</button>
                 </form>
             </td>
-            <td th:if="${isAdmin}">
+            <!--<td th:if="${isAdmin}">
                 <form th:action="@{'delete/{id}'(id=${table.id})}" method="post">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
+            </td>-->
+            <td th:if="${isAdmin}">
+                <button type="button" class="btn btn-danger"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteConfirm">Delete</button>
             </td>
         </tr>
         </tbody>
     </table>
+</div>
+
+<div class="modal fade" id="deleteConfirm" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteConfirmLabel">Attention</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>If you delete this table, all records will be deleted too.</p>
+                <p>Do you confirm?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-success">Confirm</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script crossorigin="anonymous"
