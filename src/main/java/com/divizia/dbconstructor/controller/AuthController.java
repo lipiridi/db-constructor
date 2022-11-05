@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.controller;
 
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
@@ -54,13 +55,10 @@ public class AuthController {
 
     @PostMapping("register")
     public String postRegisterPage(@Valid User user, BindingResult result, Model model) {
-        if (ControllerHelper.hasErrors(result, model)) {
-            model.addAttribute("roles", Role.values());
-            return "register";
-        }
-
-        if (userService.findById(user.getId()).isPresent()) {
-            model.addAttribute("errorList", List.of("Sorry, user is already exist!"));
+        if (ControllerHelper.hasErrors(result, model) ||
+                ControllerHelper.exists(
+                        userService.findById(user.getId()),
+                        model)) {
             model.addAttribute("roles", Role.values());
             return "register";
         }

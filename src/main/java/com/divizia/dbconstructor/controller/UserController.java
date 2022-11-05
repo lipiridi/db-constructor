@@ -109,15 +109,13 @@ public class UserController {
     public String postAdd(@Valid Subscription subscription, BindingResult result, Model model) {
         checkPermission(subscription.getUser().getId());
 
-        if (ControllerHelper.hasErrors(result, model))
+        if (ControllerHelper.hasErrors(result, model) ||
+                ControllerHelper.exists(
+                        subscriptionService.findByUserIdAndCustomTableId(
+                                subscription.getUser().getId(),
+                                subscription.getCustomTable().getId()),
+                        model))
             return getEditWithValues(model, subscription.getUser(), subscription);
-        if (subscriptionService.findByUserIdAndCustomTableId(
-                        subscription.getUser().getId(),
-                        subscription.getCustomTable().getId())
-                .isPresent()) {
-            model.addAttribute("errorList", List.of("This subscription already exists!"));
-            return getEditWithValues(model, subscription.getUser(), subscription);
-        }
 
         subscriptionService.saveAndFlush(subscription);
 
