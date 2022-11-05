@@ -48,7 +48,10 @@ public class CustomTableController {
 
     @PostMapping("create")
     public String postCreate(@Valid CustomTable customTable, BindingResult result, Model model) {
-        if (ControllerHelper.hasErrors(result, model))
+        if (ControllerHelper.hasErrors(result, model) ||
+                ControllerHelper.exists(
+                        customTableService.findById(customTable.getId()),
+                        model))
             return "tables/create";
 
         CustomTable customTableSaved = customTableService.saveAndFlush(customTable);
@@ -103,7 +106,13 @@ public class CustomTableController {
 
     @PostMapping("requisite/add")
     public String postAdd(@Valid Requisite requisite, BindingResult result, Model model) {
-        if (ControllerHelper.hasErrors(result, model))
+        if (ControllerHelper.hasErrors(result, model) ||
+                ControllerHelper.exists(
+                        requisiteService.findById(
+                                new RequisiteId(
+                                        requisite.getId(),
+                                        requisite.getCustomTable().getId())),
+                        model))
             return getEditWithValues(model, requisite.getCustomTable(), requisite);
         if (requisite.getType() == RequisiteType.FOREIGN && requisite.getForeignTableId().isEmpty()) {
             model.addAttribute("errorList", List.of("You didn't choose foreign table!"));
