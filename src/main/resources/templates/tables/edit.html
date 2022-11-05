@@ -8,12 +8,7 @@
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" rel="stylesheet">
     <!--suppress JSUnresolvedLibraryURL -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script>
-        function hideForeignDiv() {
-            const requisiteIsForeign = [[${requisiteIsForeign}]];
-            document.getElementById("foreignDiv").hidden = !requisiteIsForeign;
-        }
-    </script>
+    <script th:src="@{/js/functions.js}"></script>
 </head>
 <body onload="hideForeignDiv()">
 
@@ -43,9 +38,9 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <form class="row g-3" method="post" action="/tables/requisite/add">
+    <form action="/tables/requisite/add" class="row g-3" method="post">
 
-        <label hidden class="visually-hidden" for="customTable">Id</label>
+        <label class="visually-hidden" for="customTable" hidden>Id</label>
         <input hidden id="customTable" name="customTable" th:value="${customTable.id}">
 
         <div class="col-auto">
@@ -61,24 +56,12 @@
 
         <div class="col-auto">
             <label class="visually-hidden" for="type">Type</label>
-            <select class="form-select" id="type" name="type">
+            <select class="form-select" id="type" name="type" onchange="hideForeignDiv()">
                 <option th:each="requisiteType: ${requisiteTypes}"
                         th:selected="${requisiteType == requisite.type}"
                         th:text="${requisiteType}"
                         th:value="${requisiteType}">
             </select>
-
-            <script>
-                $("#type").change(function () {
-                    if ($('#type').val() === 'FOREIGN') {
-                        $("#foreignDiv").removeAttr('hidden');
-                    } else {
-                        $("#foreignDiv").attr('hidden', 'hidden');
-                        $("#foreignTableId").val("");
-                    }
-                })
-            </script>
-
         </div>
 
         <div class="col-auto" id="foreignDiv">

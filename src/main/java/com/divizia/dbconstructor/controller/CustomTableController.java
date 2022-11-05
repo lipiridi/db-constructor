@@ -79,7 +79,6 @@ public class CustomTableController {
         model.addAttribute("requisites", requisiteService.findByCustomTableId(customTable.getId()));
         model.addAttribute("requisiteTypes", RequisiteType.values());
         model.addAttribute("requisite", requisite);
-        model.addAttribute("requisiteIsForeign", requisite.getType() == RequisiteType.FOREIGN);
         model.addAttribute("otherTables", customTableService.findAll().stream().filter(x -> !x.equals(customTable)).toList());
         return "tables/edit";
     }
