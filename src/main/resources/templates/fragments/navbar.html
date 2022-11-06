@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+</head>
+<body>
+
+<div th:fragment="navbar">
+    <nav class="navbar bg-light">
+        <form class="container-fluid justify-content-center">
+            <a class="btn btn-outline-dark me-2" href="/">Home</a>
+            <a class="btn btn-outline-dark me-2" href="/tables/all">All tables</a>
+            <a class="btn btn-outline-dark me-2" href="/users/all"
+               th:if="${session.userIsAdmin}">
+                Manage users
+            </a>
+            <span class="navbar-text me-2" style="color: black; font-weight: bold" th:text="${session.userName} + ':'"></span>
+            <a class="btn btn-outline-dark me-2" th:href="@{'/users/edit/{id}'(id=${session.userName})}">My profile</a>
+            <a class="btn btn-outline-danger" href="/logout">Logout</a>
+        </form>
+    </nav>
+</div>
+
+</body>
+</html>

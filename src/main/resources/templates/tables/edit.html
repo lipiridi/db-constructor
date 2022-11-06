@@ -6,16 +6,11 @@
     <title>Edit table</title>
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" rel="stylesheet">
-    <!--suppress JSUnresolvedLibraryURL -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script>
-        function hideForeignDiv() {
-            const requisiteIsForeign = [[${requisiteIsForeign}]];
-            document.getElementById("foreignDiv").hidden = !requisiteIsForeign;
-        }
-    </script>
+    <script th:src="@{/js/functions.js}"></script>
 </head>
 <body onload="hideForeignDiv()">
+
+<div th:insert="~{fragments/navbar :: navbar}"></div>
 
 <div class="text-center">
     <h1>Edit table</h1>
@@ -34,16 +29,16 @@
     </form>
 </div>
 
-<div th:insert="~{fragments :: errorFragment}"></div>
+<div th:insert="~{fragments/main :: errorFragment}"></div>
 
 <div class="text-center">
     <h3>Add new requisite:</h3>
 </div>
 
 <div class="d-flex justify-content-center">
-    <form class="row g-3" method="post" action="/tables/requisite/add">
+    <form action="/tables/requisite/add" class="row g-3" method="post">
 
-        <label hidden class="visually-hidden" for="customTable">Id</label>
+        <label class="visually-hidden" for="customTable" hidden>Id</label>
         <input hidden id="customTable" name="customTable" th:value="${customTable.id}">
 
         <div class="col-auto">
@@ -59,24 +54,12 @@
 
         <div class="col-auto">
             <label class="visually-hidden" for="type">Type</label>
-            <select class="form-select" id="type" name="type">
+            <select class="form-select" id="type" name="type" onchange="hideForeignDiv()">
                 <option th:each="requisiteType: ${requisiteTypes}"
                         th:selected="${requisiteType == requisite.type}"
                         th:text="${requisiteType}"
                         th:value="${requisiteType}">
             </select>
-
-            <script>
-                $("#type").change(function () {
-                    if ($('#type').val() === 'FOREIGN') {
-                        $("#foreignDiv").removeAttr('hidden');
-                    } else {
-                        $("#foreignDiv").attr('hidden', 'hidden');
-                        $("#foreignTableId").val("");
-                    }
-                })
-            </script>
-
         </div>
 
         <div class="col-auto" id="foreignDiv">
@@ -108,6 +91,7 @@
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Type</th>
+            <th scope="col">Foreign table</th>
             <th scope="col">Delete</th>
         </tr>
         </thead>
@@ -116,6 +100,7 @@
             <th scope="row" th:text="${requisite.id}"></th>
             <td th:text="${requisite.name}"></td>
             <td th:text="${requisite.type}"></td>
+            <td th:text="${requisite.foreignTableId}"></td>
             <td>
                 <form method="post"
                       th:action="@{'/tables/requisite/delete/{customTableId}/{id}'(id=${requisite.id}, customTableId=${customTable.id})}">

@@ -9,6 +9,8 @@
 </head>
 <body>
 
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
 <div class="text-center">
     <h1>Manage records in table:</h1>
     <h2 th:text="${customTable.name}"></h2>

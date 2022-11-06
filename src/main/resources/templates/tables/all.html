@@ -6,13 +6,15 @@
     <title>Tables</title>
     <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" rel="stylesheet">
+    <script th:src="@{/js/functions.js}"></script>
 </head>
 <body>
 
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
 <div class="text-center">
     <h1>Manage tables</h1>
-    <p><a class="btn btn-primary" href="/" role="button">Go home</a></p>
-    <p th:if="${isAdmin}"><a class="btn btn-primary" href="/tables/create" role="button">Create new</a></p>
+    <p th:if="${session.userIsAdmin}"><a class="btn btn-primary" href="/tables/create" role="button">Create new</a></p>
 </div>
 
 <div class="d-flex justify-content-center">
@@ -24,8 +26,8 @@
             <th scope="col">Author</th>
             <th scope="col">Requisites</th>
             <th scope="col">Records</th>
-            <th scope="col" th:if="${isAdmin}">Edit</th>
-            <th scope="col" th:if="${isAdmin}">Delete</th>
+            <th scope="col" th:if="${session.userIsAdmin}">Edit</th>
+            <th scope="col" th:if="${session.userIsAdmin}">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -39,19 +41,40 @@
                     <button type="submit" class="btn btn-success">Records</button>
                 </form>
             </td>
-            <td th:if="${isAdmin}">
+            <td th:if="${session.userIsAdmin}">
                 <form th:action="@{'edit/{id}'(id=${table.id})}">
                     <button type="submit" class="btn btn-secondary">Edit</button>
                 </form>
             </td>
-            <td th:if="${isAdmin}">
-                <form th:action="@{'delete/{id}'(id=${table.id})}" method="post">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+            <td th:if="${session.userIsAdmin}">
+                <button type="button" class="btn btn-danger" th:data-id="${table.id}" onclick="onDeleteClick(this)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteConfirmModal">Delete</button>
             </td>
         </tr>
         </tbody>
     </table>
+</div>
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteConfirmLabel">Attention</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>If you delete this table, all records will be deleted too.</p>
+                <p>Do you confirm?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form id="deleteConfirmForm" method="post">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script crossorigin="anonymous"

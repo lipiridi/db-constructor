@@ -1,9 +1,11 @@
 package com.divizia.dbconstructor.controller;
 
+import com.divizia.dbconstructor.model.compositekeys.RequisiteId;
 import com.divizia.dbconstructor.model.entity.User;
 import com.divizia.dbconstructor.model.enums.Role;
 import com.divizia.dbconstructor.model.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -26,18 +29,21 @@ public class AuthController {
 
     @GetMapping(value = "/")
     public String authorize(Model model) {
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> optionalUser = userService.findById(currentUsername);
-        User user = optionalUser.orElse(new User());
-
-        model.addAttribute("user", user);
-        model.addAttribute("isAdmin", user.getRole() == Role.ADMIN);
         return "welcome";
     }
 
     @GetMapping("login")
     public String getLoginPage() {
         return "login";
+    }
+
+    @PostMapping ("login/setAttributes")
+    public String postLoginPage(HttpSession httpSession) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        httpSession.setAttribute("userName", authentication.getName());
+        httpSession.setAttribute("userIsAdmin", authentication.getAuthorities().contains(Role.ADMIN));
+        return "redirect:/";
     }
 
     @GetMapping("welcome")
@@ -54,13 +60,10 @@ public class AuthController {
 
     @PostMapping("register")
     public String postRegisterPage(@Valid User user, BindingResult result, Model model) {
-        if (ControllerHelper.hasErrors(result, model)) {
-            model.addAttribute("roles", Role.values());
-            return "register";
-        }
-
-        if (userService.findById(user.getId()).isPresent()) {
-            model.addAttribute("errorList", List.of("Sorry, user is already exist!"));
+        if (ControllerHelper.hasErrors(result, model) ||
+                ControllerHelper.exists(
+                        userService.findById(user.getId()),
+                        model)) {
             model.addAttribute("roles", Role.values());
             return "register";
         }
