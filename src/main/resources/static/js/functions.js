@@ -9,3 +9,7 @@ function hideForeignDiv() {
         elSel.value = "";
     }
 }
+
+function onDeleteClick(button) {
+    document.getElementById("deleteConfirmForm").action = "/tables/delete/" + button.getAttribute("data-id");
+}

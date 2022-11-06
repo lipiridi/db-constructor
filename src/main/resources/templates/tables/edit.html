@@ -93,6 +93,7 @@
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Type</th>
+            <th scope="col">Foreign table</th>
             <th scope="col">Delete</th>
         </tr>
         </thead>
@@ -101,6 +102,7 @@
             <th scope="row" th:text="${requisite.id}"></th>
             <td th:text="${requisite.name}"></td>
             <td th:text="${requisite.type}"></td>
+            <td th:text="${requisite.foreignTableId}"></td>
             <td>
                 <form method="post"
                       th:action="@{'/tables/requisite/delete/{customTableId}/{id}'(id=${requisite.id}, customTableId=${customTable.id})}">
