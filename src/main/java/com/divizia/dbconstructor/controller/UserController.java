@@ -82,13 +82,23 @@ public class UserController {
         if (ControllerHelper.hasErrors(result, model))
             return getEditWithValues(model, user);
 
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean needLogout = false;
+
         Optional<User> foundInDB = userService.findById(id);
-        if (foundInDB.isPresent())
-            user = foundInDB.get().updateAllowed(user);
+        if (foundInDB.isPresent()) {
+            User userInDb = foundInDB.get();
+            needLogout = user.getId().equals(currentUsername) && (userInDb.getRole() != user.getRole());
+
+            user = userInDb.updateAllowed(user);
+        }
 
         userService.saveAndFlush(user);
 
-        return "redirect:/users/edit/" + id;
+        if (needLogout)
+            return "redirect:/logout";
+        else
+            return "redirect:/users/edit/" + id;
     }
 
     @PostMapping("delete/{id}")

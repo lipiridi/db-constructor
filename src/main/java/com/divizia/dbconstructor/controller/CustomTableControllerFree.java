@@ -24,11 +24,6 @@ public class CustomTableControllerFree {
 
     @GetMapping("all")
     public String getAll(Model model) {
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> optionalUser = userService.findById(currentUsername);
-        User user = optionalUser.orElse(new User());
-
-        model.addAttribute("isAdmin", user.getRole() == Role.ADMIN);
         model.addAttribute("tables", customTableService.findAllWithRequisites());
         return "tables/all";
     }

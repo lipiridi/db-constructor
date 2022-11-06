@@ -14,7 +14,7 @@
 
 <div class="text-center">
     <h1>Manage tables</h1>
-    <p th:if="${isAdmin}"><a class="btn btn-primary" href="/tables/create" role="button">Create new</a></p>
+    <p th:if="${session.userIsAdmin}"><a class="btn btn-primary" href="/tables/create" role="button">Create new</a></p>
 </div>
 
 <div class="d-flex justify-content-center">
@@ -26,8 +26,8 @@
             <th scope="col">Author</th>
             <th scope="col">Requisites</th>
             <th scope="col">Records</th>
-            <th scope="col" th:if="${isAdmin}">Edit</th>
-            <th scope="col" th:if="${isAdmin}">Delete</th>
+            <th scope="col" th:if="${session.userIsAdmin}">Edit</th>
+            <th scope="col" th:if="${session.userIsAdmin}">Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -41,12 +41,12 @@
                     <button type="submit" class="btn btn-success">Records</button>
                 </form>
             </td>
-            <td th:if="${isAdmin}">
+            <td th:if="${session.userIsAdmin}">
                 <form th:action="@{'edit/{id}'(id=${table.id})}">
                     <button type="submit" class="btn btn-secondary">Edit</button>
                 </form>
             </td>
-            <td th:if="${isAdmin}">
+            <td th:if="${session.userIsAdmin}">
                 <button type="button" class="btn btn-danger" th:data-id="${table.id}" onclick="onDeleteClick(this)"
                         data-bs-toggle="modal"
                         data-bs-target="#deleteConfirmModal">Delete</button>

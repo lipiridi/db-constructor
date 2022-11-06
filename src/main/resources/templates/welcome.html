@@ -12,14 +12,14 @@
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
 <div class="text-center">
-    <h1 th:text="'Hello, ' + ${user.id} + '! Your role is ' + ${user.role}"></h1>
+    <h1 th:text="'Hello, ' + ${session.userName} + '!'"></h1>
     <h2>So, what you will do?</h2>
 </div>
 
 <div class="text-center">
     <p><a class="btn btn-primary btn-lg" href="tables/all" role="button">Go to tables</a></p>
-    <p><a class="btn btn-primary btn-lg" th:href="@{'users/edit/{id}'(id=${user.id})}" role="button">Edit my profile</a></p>
-    <p th:if="${isAdmin}"><a class="btn btn-primary btn-lg" href="users/all" role="button">Manage users</a></p>
+    <p><a class="btn btn-primary btn-lg" th:href="@{'users/edit/{id}'(id=${session.userName})}" role="button">Edit my profile</a></p>
+    <p th:if="${session.userIsAdmin}"><a class="btn btn-primary btn-lg" href="users/all" role="button">Manage users</a></p>
     <p><a class="btn btn btn-secondary btn-sm" href="/logout" role="button">Logout</a></p>
 </div>
 
