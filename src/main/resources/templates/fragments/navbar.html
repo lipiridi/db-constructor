@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Navbar</title>
@@ -12,11 +12,12 @@
             <a class="btn btn-outline-dark me-2" href="/">Home</a>
             <a class="btn btn-outline-dark me-2" href="/tables/all">All tables</a>
             <a class="btn btn-outline-dark me-2" href="/users/all"
-               th:if="${session.userIsAdmin}">
+               sec:authorize="hasAuthority('ADMIN')">
                 Manage users
             </a>
-            <span class="navbar-text me-2" style="color: black; font-weight: bold" th:text="${session.userName} + ':'"></span>
-            <a class="btn btn-outline-dark me-2" th:href="@{'/users/edit/{id}'(id=${session.userName})}">My profile</a>
+            <span class="navbar-text me-2" style="color: black; font-weight: bold"
+                  th:text="${#authentication.name + ':'}"></span>
+            <a class="btn btn-outline-dark me-2" th:href="@{'/users/edit/{id}'(id=${#authentication.name})}">My profile</a>
             <a class="btn btn-outline-danger" href="/logout">Logout</a>
         </form>
     </nav>

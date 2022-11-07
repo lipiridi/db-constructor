@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div class="text-center" th:fragment="errorFragment" style="color: darkred; font-weight: bold; font-size: 120%" >
+<div class="text-center" th:if="${errorList != null}" th:fragment="errorFragment" style="color: darkred; font-weight: bold; font-size: 120%" >
     <p th:each="error : ${errorList}" th:text="${error}"></p>
 </div>
 

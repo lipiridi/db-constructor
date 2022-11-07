@@ -21,7 +21,7 @@
                 <label class="form-label" for="id">Username</label>
                 <input class="form-control" id="id" name="id" type="text"
                        th:value="${user.id}"
-                       th:readonly="${user.id != null}">
+                       th:readonly="${user.id != null && !user.id.isBlank()}">
             </div>
 
             <div class="mb-3">

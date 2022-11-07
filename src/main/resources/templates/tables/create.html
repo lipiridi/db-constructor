@@ -22,7 +22,7 @@
         <div th:fragment="createFragment">
             <div class="mb-3">
                 <label class="form-label" for="id">Id</label>
-                <input class="form-control" id="id" th:readonly="${customTable.id != null}" name="id" th:value="${customTable.id}" type="text">
+                <input class="form-control" id="id" th:readonly="${customTable.id != null && !customTable.id.isBlank()}" name="id" th:value="${customTable.id}" type="text">
             </div>
 
             <div class="mb-3">

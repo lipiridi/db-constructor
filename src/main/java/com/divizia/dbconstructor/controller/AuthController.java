@@ -37,13 +37,10 @@ public class AuthController {
         return "login";
     }
 
-    @PostMapping ("login/setAttributes")
-    public String postLoginPage(HttpSession httpSession) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        httpSession.setAttribute("userName", authentication.getName());
-        httpSession.setAttribute("userIsAdmin", authentication.getAuthorities().contains(Role.ADMIN));
-        return "redirect:/";
+    @GetMapping("login-error")
+    public String getLoginErrorPage(Model model) {
+        model.addAttribute("errorList", List.of("Username or password is wrong!"));
+        return "login";
     }
 
     @GetMapping("welcome")
