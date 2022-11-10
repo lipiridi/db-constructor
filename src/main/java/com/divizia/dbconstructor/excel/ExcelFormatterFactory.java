@@ -1,6 +1,7 @@
 package com.divizia.dbconstructor.excel;
 
 import com.divizia.dbconstructor.model.enums.RequisiteType;
+import com.divizia.dbconstructor.model.serializers.Formatter;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -31,7 +32,7 @@ public class ExcelFormatterFactory {
 
     private void setLocalDateTimeFormat(XSSFCellStyle dateStyle) {
         dateStyle.setDataFormat(
-                workbook.createDataFormat().getFormat("dd.MM.yyyy HH:mm:ss")
+                workbook.createDataFormat().getFormat(Formatter.DATE_FORMAT)
         );
     }
 }
