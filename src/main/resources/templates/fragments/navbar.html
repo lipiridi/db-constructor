@@ -7,7 +7,7 @@
 <body>
 
 <div th:fragment="navbar">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <div class="container">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
             <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
@@ -17,23 +17,27 @@
 
             <ul class="nav col-9 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li>
-                    <a href="/" class="nav-link px-2 link-dark">Home</a>
+                    <a href="/" class="nav-link px-2 link-dark">
+                        <i class="bi bi-house-door"></i> Home</a>
                 </li>
                 <li>
-                    <a href="/tables/all" class="nav-link px-2 link-dark">All tables</a>
+                    <a href="/tables/all" class="nav-link px-2 link-dark">
+                        <i class="bi bi-table"></i> All tables</a>
                 </li>
                 <li sec:authorize="hasAuthority('ADMIN')">
-                    <a href="/users/all" class="nav-link px-2 link-dark">Manage users</a>
+                    <a href="/users/all" class="nav-link px-2 link-dark">
+                        <i class="bi bi-person-lines-fill"></i> Manage users</a>
                 </li>
                 <li>
                     <a th:href="@{'/users/edit/{id}'(id=${#authentication.name})}"
-                       class="nav-link px-2 link-dark">My profile</a>
+                       class="nav-link px-2 link-dark"><i class="bi bi-person"></i> My profile</a>
                 </li>
             </ul>
 
             <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
                 <a th:href="@{'/users/edit/{id}'(id=${#authentication.name})}"
                    class="link-dark px-4" style="text-decoration:none;">
+                    <i class="bi bi-person-circle"></i>
                     <span sec:authentication="name" class="fw-bold">Username</span>
                 </a>
                 <a href="/logout" type="button" class="btn btn-outline-danger">Logout</a>
