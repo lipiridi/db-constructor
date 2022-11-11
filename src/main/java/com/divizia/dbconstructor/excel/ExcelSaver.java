@@ -3,6 +3,7 @@ package com.divizia.dbconstructor.excel;
 import com.divizia.dbconstructor.model.entity.CustomTable;
 import com.divizia.dbconstructor.model.entity.Record;
 import com.divizia.dbconstructor.model.entity.Requisite;
+import com.divizia.dbconstructor.model.enums.RequisiteType;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -28,9 +29,12 @@ public class ExcelSaver {
 
     @Value("${excel.download.max-cells-per-list}")
     private int MAX_CELLS;
+    private ExcelFormatterFactory excelFormatterFactory;
 
     public Resource exportRecords(String fileName, Map<CustomTable, ? extends Collection<Record>> records) {
         XSSFWorkbook workbook = new XSSFWorkbook();
+        excelFormatterFactory = new ExcelFormatterFactory(workbook);
+
         records.forEach((x, y) -> {
             XSSFSheet sheet = workbook.createSheet(x.getId());
 
@@ -48,7 +52,7 @@ public class ExcelSaver {
             Path tempFile = Files.createTempFile(fileName + "_", ".xlsx");
             OutputStream outputStream = Files.newOutputStream(tempFile);
             workbook.write(outputStream);
-            outputStream.close();
+            workbook.close();
 
             resource = new UrlResource(tempFile.toUri());
         } catch (IOException e) {
@@ -73,6 +77,7 @@ public class ExcelSaver {
 
             Cell cellRecordLastUpdate = recordRow.createCell(1);
             cellRecordLastUpdate.setCellValue(record.getUpdateTime());
+            cellRecordLastUpdate.setCellStyle(excelFormatterFactory.getStyle(RequisiteType.LOCAL_DATE_TIME));
 
             record.getRequisiteValueMap().forEach((key, value) -> {
                 Cell recordCell = recordRow.createCell(requisitePositions.get(key));
@@ -91,8 +96,10 @@ public class ExcelSaver {
             recordCell.setCellValue(Double.parseDouble(value.toString()));
         else if (value instanceof Boolean)
             recordCell.setCellValue((Boolean) value);
-        else if (value instanceof LocalDateTime)
+        else if (value instanceof LocalDateTime) {
             recordCell.setCellValue((LocalDateTime) value);
+            recordCell.setCellStyle(excelFormatterFactory.getStyle(RequisiteType.LOCAL_DATE_TIME));
+        }
         else
             recordCell.setCellValue(String.valueOf(value));
     }
