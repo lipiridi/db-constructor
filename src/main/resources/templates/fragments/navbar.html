@@ -7,20 +7,40 @@
 <body>
 
 <div th:fragment="navbar">
-    <nav class="navbar bg-light">
-        <form class="container-fluid justify-content-center">
-            <a class="btn btn-outline-dark me-2" href="/">Home</a>
-            <a class="btn btn-outline-dark me-2" href="/tables/all">All tables</a>
-            <a class="btn btn-outline-dark me-2" href="/users/all"
-               sec:authorize="hasAuthority('ADMIN')">
-                Manage users
+
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img src="../../images/favicon.png" class="bi me-2 pb-2" />
+                <h5 class="ms-2"><strong>DB Constructor</strong></h5>
             </a>
-            <span class="navbar-text me-2" style="color: black; font-weight: bold"
-                  th:text="${#authentication.name + ':'}"></span>
-            <a class="btn btn-outline-dark me-2" th:href="@{'/users/edit/{id}'(id=${#authentication.name})}">My profile</a>
-            <a class="btn btn-outline-danger" href="/logout">Logout</a>
-        </form>
-    </nav>
+
+            <ul class="nav col-9 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <a href="/" class="nav-link px-2 link-dark">Home</a>
+                </li>
+                <li>
+                    <a href="/tables/all" class="nav-link px-2 link-dark">All tables</a>
+                </li>
+                <li sec:authorize="hasAuthority('ADMIN')">
+                    <a href="/users/all" class="nav-link px-2 link-dark">Manage users</a>
+                </li>
+                <li>
+                    <a th:href="@{'/users/edit/{id}'(id=${#authentication.name})}"
+                       class="nav-link px-2 link-dark">My profile</a>
+                </li>
+            </ul>
+
+            <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+                <a th:href="@{'/users/edit/{id}'(id=${#authentication.name})}"
+                   class="link-dark px-4" style="text-decoration:none;">
+                    <span sec:authentication="name" class="fw-bold">Username</span>
+                </a>
+                <a href="/logout" type="button" class="btn btn-outline-danger">Logout</a>
+            </div>
+        </header>
+    </div>
+
 </div>
 
 </body>
