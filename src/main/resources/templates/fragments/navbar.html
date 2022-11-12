@@ -34,12 +34,28 @@
                 </li>
             </ul>
 
-            <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
-                <a th:href="@{'/users/edit/{id}'(id=${#authentication.name})}"
-                   class="link-dark px-4" style="text-decoration:none;">
-                    <i class="bi bi-person-circle"></i>
-                    <span sec:authentication="name" class="fw-bold">Username</span>
-                </a>
+            <div class="d-flex justify-content-end" sec:authorize="isAuthenticated()">
+
+                <div class="dropdown me-4">
+                    <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span sec:authentication="name" class="fw-bold">Username</span>
+                        <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li>
+                            <a class="dropdown-item"
+                               th:href="@{'/users/edit/{id}'(id=${#authentication.name})}">
+                                Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" th:href="@{'/users/{id}/password'(id=${#authentication.name})}">
+                                Change Password
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
                 <a href="/logout" type="button" class="btn btn-outline-danger">Logout</a>
             </div>
         </header>
