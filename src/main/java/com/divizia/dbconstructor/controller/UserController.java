@@ -99,25 +99,23 @@ public class UserController {
     }
 
     @GetMapping("/{id}/password")
-    public String getPasswordEdit(@PathVariable String id,
+    public String getPasswordEdit(@PathVariable @ModelAttribute String id,
                                   @ModelAttribute PasswordEditDto passwordEditDto,
                                   Model model) {
         checkPermission(id);
-        model.addAttribute("id", id);
+//        model.addAttribute("id", id);
         return "users/password";
     }
 
     @PutMapping("/{id}/password")
     public String updatePassword(@PathVariable String id,
                                  @ModelAttribute @Valid PasswordEditDto passwordEditDto,
-                                 BindingResult bindingResult) {
+                                 BindingResult result) {
         checkPermission(id);
-
-        if (bindingResult.hasErrors()) {
+        if (result.hasErrors())
             return "users/password";
-        }
 
-        return "users/password";
+        return "redirect:/logout";
     }
 
     @PostMapping("delete/{id}")
