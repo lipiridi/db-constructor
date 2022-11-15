@@ -100,10 +100,8 @@ public class UserController {
 
     @GetMapping("/{id}/password")
     public String getPasswordEdit(@PathVariable @ModelAttribute String id,
-                                  @ModelAttribute PasswordEditDto passwordEditDto,
-                                  Model model) {
+                                  @ModelAttribute PasswordEditDto passwordEditDto) {
         checkPermission(id);
-//        model.addAttribute("id", id);
         return "users/password";
     }
 
@@ -115,6 +113,7 @@ public class UserController {
         if (result.hasErrors())
             return "users/password";
 
+        userService.updatePassword(id, passwordEditDto.getNewPassword());
         return "redirect:/logout";
     }
 
