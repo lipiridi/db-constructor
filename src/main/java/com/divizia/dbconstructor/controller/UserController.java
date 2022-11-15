@@ -1,5 +1,6 @@
 package com.divizia.dbconstructor.controller;
 
+import com.divizia.dbconstructor.dto.PasswordEditDto;
 import com.divizia.dbconstructor.exceptions.UserNotFoundException;
 import com.divizia.dbconstructor.exceptions.UserPermissionException;
 import com.divizia.dbconstructor.model.entity.CustomTable;
@@ -16,18 +17,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("SameReturnValue")
 @Controller
-@RequestMapping("users")
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 
@@ -99,6 +96,28 @@ public class UserController {
             return "redirect:/logout";
         else
             return "redirect:/users/edit/" + id;
+    }
+
+    @GetMapping("/{id}/password")
+    public String getPasswordEdit(@PathVariable String id,
+                                  @ModelAttribute PasswordEditDto passwordEditDto,
+                                  Model model) {
+        checkPermission(id);
+        model.addAttribute("id", id);
+        return "users/password";
+    }
+
+    @PutMapping("/{id}/password")
+    public String updatePassword(@PathVariable String id,
+                                 @ModelAttribute @Valid PasswordEditDto passwordEditDto,
+                                 BindingResult bindingResult) {
+        checkPermission(id);
+
+        if (bindingResult.hasErrors()) {
+            return "users/password";
+        }
+
+        return "users/password";
     }
 
     @PostMapping("delete/{id}")
