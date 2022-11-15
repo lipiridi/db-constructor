@@ -65,9 +65,6 @@ public class User implements Updatable<User> {
     public User updateAllowed(User other) {
         if (!id.equals(other.id))
             return this;
-
-        if (other.password != null && !other.password.equals(password))
-            password = new BCryptPasswordEncoder(12).encode(other.password);
         if (other.role != null)
             role = other.role;
         if (other.email != null)

@@ -24,9 +24,9 @@
                        th:readonly="${!#httpServletRequest.requestURI.endsWith('register')}">
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3" th:if="${#httpServletRequest.requestURI.endsWith('register')}">
                 <label class="form-label" for="password">Password</label>
-                <input class="form-control" id="password" name="password" th:value="${user.password}"
+                <input class="form-control" id="password" name="password"
                        type="password">
             </div>
 

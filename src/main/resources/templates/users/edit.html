@@ -36,6 +36,8 @@
 
                 <div th:insert="~{register :: createFragment}"></div>
 
+                <input type="hidden" id="password" name="password" th:value="${user.password}">
+
                 <div class="text-center">
                     <button class="btn btn-primary" type="submit">Edit</button>
                 </div>
