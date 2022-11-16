@@ -5,7 +5,6 @@ import com.divizia.dbconstructor.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -65,6 +64,7 @@ public class User implements Updatable<User> {
     public User updateAllowed(User other) {
         if (!id.equals(other.id))
             return this;
+
         if (other.role != null)
             role = other.role;
         if (other.email != null)

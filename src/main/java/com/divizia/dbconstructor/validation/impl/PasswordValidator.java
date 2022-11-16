@@ -12,20 +12,21 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @RequiredArgsConstructor
-public class PasswordValidator implements ConstraintValidator<Password, PasswordEditDto>{
+public class PasswordValidator implements ConstraintValidator<Password, PasswordEditDto> {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public boolean isValid(PasswordEditDto passwordDto, ConstraintValidatorContext constraintValidatorContext) {
 
-        return userService.findById(passwordDto.getUsername())
+        return userService.findById(passwordDto.username())
                 .map(User::getPassword)
-                .map(password -> passwordEncoder.matches(passwordDto.getCurrentPassword(), password)
-                        &&!passwordDto.getCurrentPassword().equals(passwordDto.getNewPassword())
-                        && passwordDto.getNewPassword().equals(passwordDto.getRepeatPassword())
+                .map(password -> passwordEncoder.matches(passwordDto.currentPassword(), password)
+                        && !passwordDto.currentPassword().equals(passwordDto.newPassword())
+                        && passwordDto.newPassword().equals(passwordDto.repeatPassword())
                 )
-                .orElseThrow(() -> new UserNotFoundException(passwordDto.getUsername()));
+                .orElseThrow(() -> new UserNotFoundException(passwordDto.username()));
 
     }
 }
