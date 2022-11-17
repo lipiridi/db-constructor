@@ -1,6 +1,6 @@
 package com.divizia.dbconstructor.validation;
 
-import com.divizia.dbconstructor.validation.impl.PasswordValidator;
+import com.divizia.dbconstructor.validation.impl.ActualPasswordValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,16 +9,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = PasswordValidator.class)
-@Target(ElementType.TYPE)
+@Constraint(validatedBy = ActualPasswordValidator.class)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Password {
+public @interface ActualPassword {
 
-    String message() default "New password shouldn't be equal to current.\n" +
-            "You should repeat new password twice";
+    String message() default "Please, input your actual password here";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }
